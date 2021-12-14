@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "gold-atlas-326210",
+  "private_key_id": "a77d1d86cfa5e49d03143ce2eecc92b4b67d6b62",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDMg0kkbZ4LhzAv\nDSmiwLecF3sYrUed8V6yFozwLgQZkiGpLYWYALcPHfZ0dTIJudymUKEgOtljMlpV\nY1ijKQkPu3w2WN7Cbb/j/gI7egt6seCwTIdhaEcVBSfPNTKNGSE+oYEaMoZu+Ra8\nrU+BqT1QA34m5UbyoSJfS6q6rsWPda4XdzHsS491o1t5sqrHtzEn4y5BZQTpRQJR\n05TIcBAc7z2dE1nNJZ00qryPBrI8JMm+OTzxyk+EjLnuGkeZBGD9qWNMpvGqw0zf\nEK2SPJYTbrJbC9b+lMMEU6r97nkf2iru2VMJyCAt9sA1zZZihVH+1oatK1VTKmWD\nD0q7lor9AgMBAAECggEAW0BxEFoA3O/zJetfmokW5ATuHfKjM+wQ7rF1LW260pYL\ngusW4t3e0FX0M75fF0vhEiyD2Fepy8MZ32O2lwamTmi/YZiBvIsvxdD+uf8YxCQ+\nNyvOdD4NCWoFe0UnSyHdXY6+hivpI/bsmD9UbGxROTR1w3EmGPig15hxk16MNBfn\nep8oaFRWXn6gdojfKbPQOJwzTCjNdWN27KlC9H4jz1ZHmJtIbP7ykyVTCvB9U6cE\nJY92E11tROKlACVRwmRX4lBIrF5PSb4hcwUStyefjTWnHHdTbDv5ieKZXV/KrbT5\ngrmJtuSdgNXNYTtKTOFA57gRRzzQpuYOU5svtr4w2QKBgQD0B1Y18vOUD6jhsxKY\n7IkoaYOMAS3C/84AN/Lx4mEvnDI5HBu5EH/svpwJ9eilujPBcoQ/B+oQWISxalLv\nq2WZhbOEahDGSYSRvCk3aJQdobhe74EwqK9UpQdCPWEEH0+xo6VQmIuofuyD74Do\ntW2YSJHDxGsEc2csiGy4xzh1NwKBgQDWi69J9r7t38NC3/L+zSEGjSJnyPF4Pazl\n+v1oNd9R1/e8HRIFwwItCY38pEHaQV13wN0Swneo2p1waBgUHj3znuYsg7s9OJyR\nsygf9q+tk6/PRzTbN3z91736wq21UTnICN6hqnzqNyBh7XPio7qvJUAB9ySS4sAc\n3MlOXsVbawKBgQDaQ/2uP2HyWpdZWIwXz+lWBhotDZjaw2aD94cLJsp6hSC+yA9b\n1hA1tr9mgVbXdNZ5/m2e2vtWJ3Z4IXuQ9yLm0BmjJCNg170FhODwuE9SuaVo9Jv+\n48H+2aTGcJPn1gG4B4EDt42i5fOyhnQssKoX/UCzc2mtD3OG93cXRsmOvQKBgAVB\nFIDmNxTSRxDrNSNCWM21RSNvi2JbeFGFjRExSI/TjzCfMaLMfNAnjL+kMiyrLyPQ\nqFleQ9nxyKtJEVXky7WcrZxneX1tVoBG9/OYcgL5O/QClWvM9xWsY+2xONnY7GZW\nuUUSTM7bnMJpM05YnijN67xglhe2z+elDJULwx+TAoGACGFwFcWFB4YUHRZhtHs1\nPHqHoPgJDi3v3L5100JGQx6QB6ujfcDpcrXL8eIbtP7/+Oftuiwcn0tYHQoIX4aZ\nDBo8GDRPZ8kzotDIk4z8xMH5Xu1tqCywnmL3nia77V02qqLGgQkI+AlpWBE/Isj1\nJGE5xgVvuY8+59OoFGy9eIE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "chandu@gold-atlas-326210.iam.gserviceaccount.com",
+  "client_id": "117609925135611496821",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chandu%40gold-atlas-326210.iam.gserviceaccount.com"
+}
