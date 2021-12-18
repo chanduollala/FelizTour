@@ -47,7 +47,7 @@ import re
 
 Builder.load_file("file.kv")
 sm = ScreenManager()
-Window.size = (375,667)
+Window.size = (300,550)
 
 userdetails=[]
 
@@ -92,11 +92,11 @@ class MainApp(MDApp):
     def build(self):
 
         self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "BlueGray"
+        self.theme_cls.primary_palette = "Red"
         sm.add_widget(HelloScreen(name='helloscreen'))
         sm.add_widget(LoginPage(name='loginpage'))
-        #sm.add_widget(Overview(name='overview'))
-        #sm.add_widget(Transactions(name='transactions'))
+
+        sm.add_widget(Transactions(name='transactions'))
         sm.add_widget(NewTrip(name='newtrip'))
         sm.add_widget(Signup(name='signup'))
 
@@ -264,34 +264,34 @@ class MainApp(MDApp):
 
 
     def track(self):
+        sm.add_widget(Overview(name='overview'))
         sm.current="overview"
 
     def viewteam(self):
-
+        user=self.uname
+        sm.add_widget(TeamStatus(name='teamstatus'))
         sm.current="teamstatus"
 
     def goback(self):
         sm.current="postlogin"
     def getrcount(self):
         c=rsheet.col_values(2)
+        d=rsheet.col_values(3)
         id = {"Goa": 1, "Manali": 2, "Agra": 3}
-        d = {'Goa': 0, 'Manali': 0, 'Agra': 0}
-        for i in c:
-            if i=='Goa':
-                pass
+        list = {'Goa': [], 'Manali': [], 'Agra': []}
+        for i in range(len(c)):
+            list[c[i]].append(d[i])
+
+        return list
     def go(self,x):
 
         destination=x
         self.requestplaced=True
-        id={"Goa":1,"Manali":2,"Agra":3}
-        newrow = [id[x], destination,self.uname,self.phonenumber]
-        '''d={'Goa':1,'Manali':2,'Agra':3}
-        r1=d[destination]
-        x=msheet.row_values(r1*10)
-        for i in range(1,len(x)):
-            if x[i]=='':
-                r2=i'''
-        rsheet.insert_row(newrow, 2)
+        list = self.getrcount()
+        count = {"Goa": len(list['Goa']), "Manali": len(list['Manali']), "Agra": len(list['Agra'])}
+        teamno=int((count[x]/4)+1)
+        newrow = [teamno, destination,self.uname,self.phonenumber]
+        rsheet.insert_row(newrow, 1)
         Snackbar(
             text="Request placed. Check team status",
             snackbar_x="10dp",
@@ -300,9 +300,11 @@ class MainApp(MDApp):
         ).open()
         sm.add_widget(PostLogin(name='postlogin'))
         sm.current = 'postlogin'
-        rsheet.sort(1,'asc')
-        self.getrcount()
+        rsheet.sort(2,'asc')
 
+
+
+        print(list,count)
 
 
 MainApp().run()

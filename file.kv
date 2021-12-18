@@ -1,76 +1,18 @@
 <HelloScreen>:
 
-    MDCard:
-        size_hint: 0.9, 0.7
-        pos_hint: {"center_x": 0.5, "center_y": 0.45}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
-
-
-    MDLabel:
-        id: appdetail
-        text: "FELIZ TOUR"
-        font_size: 35
-        pos_hint: {"center_x": 0.5, "center_y": 0.7}
-        halign: 'center'
-        size_hint_y: None
-        padding_y: 15
-    MDLabel:
-        id: appdes
-        text: "developed by"
-        font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.6}
-        halign: 'center'
-        size_hint_y: None
-
-        padding_y: 15
-    MDLabel:
-        id: chandu
-        text: "Chandrashekar O"
-        font_size: 30
+    Image:
+        source:'logo.png'
+        size_hint_x: 1
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
-        halign: 'center'
-        size_hint_y: None
 
-        padding_y: 15
-    MDLabel:
-        id: sahaja
-        text: "Sahaja Reddy P"
-        font_size: 30
-        pos_hint: {"center_x": 0.5, "center_y": 0.4}
-        halign: 'center'
-        size_hint_y: None
-
-        padding_y: 15
-    MDRoundFlatButton:
+    MDRaisedButton:
         text: "Continue to APP"
         font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        pos_hint: {"center_x": 0.5, "center_y": 0.15}
         on_press: app.continue_to_app()
 
 
-    MDNavigationLayout:
 
-        ScreenManager:
-
-            MDScreen:
-
-                MDToolbar:
-                    title: "    Mini Project 1"
-                    elevation: 10
-                    pos_hint: {"top": 1}
-
-                    left_action_items:
-                        []
-
-
-        MDNavigationDrawer:
-            id: nav_drawer
-
-
-            ContentNavigationDrawer:
 <LoginPage>:
 
 
@@ -394,7 +336,7 @@
             MDScreen:
 
                 MDToolbar:
-                    title: "Hi "+ app.displayname
+                    title: "Hi "+ app.uname
                     elevation: 10
                     pos_hint: {"top": 1}
 
@@ -646,15 +588,11 @@
                     height:
 
                 MDLabel:
-                    text: "KivyMD library"
+                    text: "FelizTour"
                     font_style: "Button"
                     size_hint_y: None
 
 
-                MDLabel:
-                    text: "kivydevelopment@gmail.com"
-                    font_style: "Caption"
-                    size_hint_y: None
 
 
                 ScrollView:
@@ -663,10 +601,10 @@
                         id: md_list
 
                         MDFlatButton:
-                            text: "LOG IN"
-                            font_size: 12
+                            text: "Go to home page"
+                            font_size: 25
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
-                            on_press: app.login()
+                            on_press: app.goback()
 
 
 
@@ -743,7 +681,7 @@
         font_size: 18
         md_bg_color: 1, 0, 1, 1
         text_color: 0, 0, 1, 1
-        pos_hint: {"center_x": 0.25, "center_y": 0.8875}
+        pos_hint: {"center_x": 0.25, "center_y": 0.85}
         size_hint: 0.5,0.075
         on_press: app.overview()
         border: 'yellow'
@@ -751,7 +689,7 @@
     MDFlatButton:
         text: "Transactions"
         font_size: 18
-        pos_hint: {"center_x": 0.75, "center_y": 0.8875}
+        pos_hint: {"center_x": 0.75, "center_y": 0.85}
         on_press: app.transactions()
         size_hint: 0.5,0.075
 
@@ -759,8 +697,8 @@
     ScrollView:
         do_scroll_x: False
         do_scroll_y: True
-        size_hint: 1,0.850
-        pos_hint: {"center_x": 0.55, "y": 0}
+        size_hint: 1,0.80
+        pos_hint: {"center_x": 0.5275, "y": 0}
 
 
         MDCard:
@@ -786,7 +724,7 @@
             MDScreen:
 
                 MDToolbar:
-                    title: "Login Page"
+                    title: "Track Expenses"
                     elevation: 10
                     pos_hint: {"top": 1}
 
@@ -835,7 +773,7 @@
         font_size: 18
         md_bg_color: 1, 0, 1, 1
         text_color: 0, 0, 1, 1
-        pos_hint: {"center_x": 0.75, "center_y": 0.8875}
+        pos_hint: {"center_x": 0.75, "center_y": 0.85}
         size_hint: 0.5,0.075
         on_press: app.transactions()
         border: 'yellow'
@@ -843,7 +781,7 @@
     MDFlatButton:
         text: "Overview"
         font_size: 18
-        pos_hint: {"center_x": 0.25, "center_y": 0.8875}
+        pos_hint: {"center_x": 0.25, "center_y": 0.85}
         on_press: app.overview()
         size_hint: 0.5,0.075
 
@@ -862,48 +800,15 @@
             MDScreen:
 
                 MDToolbar:
-                    title: "Login Page"
+                    title: "Track Expenses"
                     elevation: 10
                     pos_hint: {"top": 1}
 
                     left_action_items:
-                        [['menu', lambda x: nav_drawer.set_state("open")]]
+                        [['back.png', lambda x: app.goback()]]
 
 
-        MDNavigationDrawer:
-            id: nav_drawer
 
-
-            ContentNavigationDrawer:
-                orientation: "vertical"
-                padding: "8dp"
-                spacing: "8dp"
-
-                AnchorLayout:
-                    anchor_x: "left"
-                    size_hint_y: None
-                    height:
-
-                MDLabel:
-                    text: "KivyMD library"
-                    font_style: "Button"
-                    size_hint_y: None
-
-                MDLabel:
-                    text: "kivydevelopment@gmail.com"
-                    font_style: "Caption"
-                    size_hint_y: None
-
-                ScrollView:
-
-                    DrawerList:
-                        id: md_list
-
-                        MDFlatButton:
-                            text: "LOG IN"
-                            font_size: 12
-                            pos_hint: {"center_x": 0.3, "center_y": 0.3}
-                            on_press: app.login()
 
 
 <AddTransaction>
