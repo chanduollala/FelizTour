@@ -199,21 +199,16 @@ class MainApp(MDApp):
     def continue_to_app(self):
         # self.root.ids.welcome_label.text = f'Sup {self.root.ids.user.text}!'
         sm.current = 'loginpage'
-
     def clear(self):
         self.root.ids.welcome_label.text = "WELCOME"
         self.root.ids.user.text = ""
         self.root.ids.password.text = ""
-
     def overview(self):
         sm.current = 'overview'
-
     def transactions(self):
         sm.current = 'transactions'
-
     def plus(self, addtrs):
         sm.current = 'addtransaction'
-
     def login(self,username,password):
         self.userdetails=self.validateuser(username,password)
         if self.userdetails!=0:
@@ -230,11 +225,9 @@ class MainApp(MDApp):
                 size_hint_x=.95
             ).open()
             sm.current = 'postlogin'
-
     def newtrip(self):
         sm.add_widget(NewTrip(name='newtrip'))
         sm.current = 'newtrip'
-
     def signup(self):
         Snackbar(
             text="Enter your details",
@@ -243,8 +236,6 @@ class MainApp(MDApp):
             size_hint_x=.95
         ).open()
         sm.current = 'signup'
-
-
     def signupSubmit(self,name,age,gender,phone,email,password):
         x=self.checksignupdata(name,age,gender,phone,email,password)
         if x=="OK":
@@ -261,17 +252,37 @@ class MainApp(MDApp):
                 size_hint_x=.95
             ).open()
             sm.current = 'loginpage'
-
-
     def track(self):
         sm.add_widget(Overview(name='overview'))
         sm.current="overview"
-
     def viewteam(self):
-        user=self.uname
+        t4 = rsheet.col_values(4)
+        t3 = rsheet.col_values(3)
+        t2 = rsheet.col_values(2)
+        t1 = rsheet.col_values(1)
+        print(t3,t2,t1)
+        team=[]
+        for i in range(0, len(t3)):
+            if t3[i] == self.uname:
+                teamdes=t2[i]
+                teamno=t1[i]
+                print('user found')
+                break
+        for i in range(len(t2)):
+            if t2[i]==teamdes and t1[i]==teamno:
+                team.append([t3[i],t4[i]])
+        self.team=team
+        self.teamname=teamdes[0].upper()+str(teamno)
+        print(self.teamname)
+        print(self.team)
+        if (len(self.team)==4):
+            self.ready='Hurray! Your team is ready'
+        else:
+            self.ready='Oops! You need to wait for others to join'
+        while(len(self.team)!=4):
+            self.team.append(['', ''])
         sm.add_widget(TeamStatus(name='teamstatus'))
         sm.current="teamstatus"
-
     def goback(self):
         sm.current="postlogin"
     def getrcount(self):
@@ -301,9 +312,6 @@ class MainApp(MDApp):
         sm.add_widget(PostLogin(name='postlogin'))
         sm.current = 'postlogin'
         rsheet.sort(2,'asc')
-
-
-
         print(list,count)
 
 

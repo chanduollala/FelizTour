@@ -616,7 +616,80 @@
         font_size: 28
         size_hint_x: 0.9
         pos_hint: {"center_x": 0.5, "center_y": 0.1}
-        on_press: app.new_trip_submit()
+        on_press: app.goback()
+    MDLabel:
+        text: "Your Team: "+app.teamname
+        font_size: 30
+        pos_hint: {"center_x": 0.5, "center_y": 0.8}
+        halign: 'center'
+    MDCard:
+        size_hint: 0.48, 0.32
+        pos_hint: {"center_x": 0.27, "center_y": 0.55}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        MDLabel:
+            text: app.team[0][0]
+            font_size: 18
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+        MDLabel:
+            text: app.team[1][0]
+            font_size: 18
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+        MDLabel:
+            text: app.team[2][0]
+            font_size: 18
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+        MDLabel:
+            text: app.team[3][0]
+            font_size: 18
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+    MDCard:
+        size_hint: 0.48, 0.32
+        pos_hint: {"center_x": 0.73, "center_y": 0.55}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        MDLabel:
+            text: app.team[0][1]
+            font_size: 15
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+
+        MDLabel:
+            text: app.team[1][1]
+            font_size: 15
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+        MDLabel:
+            text: app.team[2][1]
+            font_size: 15
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+        MDLabel:
+            text: app.team[3][1]
+            font_size: 15
+            halign: left
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            halign: 'center'
+    MDLabel:
+        text: app.ready
+        font_size: 20
+        pos_hint: {"center_x": 0.5, "center_y": 0.3}
+        halign: 'center'
     Widget:
         size_hint_y: None
         height: 10
@@ -632,7 +705,7 @@
                     pos_hint: {"top": 1}
 
                     left_action_items:
-                        [['menu', lambda x: nav_drawer.set_state("open")]]
+                        [['menu', lambda x: app.goback]]
 
 
         MDNavigationDrawer:
