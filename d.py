@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -71,7 +73,8 @@ class Signup(MDScreen):
 
 class NewTrip(MDScreen):
     pass
-
+class AddTransaction(MDScreen):
+    pass
 class ContentNavigationDrawer(MDBoxLayout):
     pass
 
@@ -81,6 +84,9 @@ class DrawerList(ButtonBehavior, MDList):
 class TeamStatus(MDScreen):
     pass
 
+class Trans(ScrollView):
+    pass
+currentscreen='helloscreen'
 class MainApp(MDApp):
 
     data = {
@@ -94,11 +100,11 @@ class MainApp(MDApp):
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Red"
         sm.add_widget(HelloScreen(name='helloscreen'))
-        sm.add_widget(LoginPage(name='loginpage'))
 
-        sm.add_widget(Transactions(name='transactions'))
+
+
         sm.add_widget(NewTrip(name='newtrip'))
-        sm.add_widget(Signup(name='signup'))
+
 
         #sm.add_widget(TeamStatus(name='teamstatus'))
 
@@ -198,17 +204,23 @@ class MainApp(MDApp):
         return "OK"
     def continue_to_app(self):
         # self.root.ids.welcome_label.text = f'Sup {self.root.ids.user.text}!'
+        sm.add_widget(LoginPage(name='loginpage'))
         sm.current = 'loginpage'
     def clear(self):
-        self.root.ids.welcome_label.text = "WELCOME"
-        self.root.ids.user.text = ""
-        self.root.ids.password.text = ""
+        self.welcome_label.text = "WELCOME"
+        self.user.text = ""
+        self.password.text = ""
     def overview(self):
         sm.current = 'overview'
     def transactions(self):
+        team=tsheet.col_values(1)
+
         sm.current = 'transactions'
     def plus(self, addtrs):
+        sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
+        sm.remove_widget(sm.get_screen('overview'))
+        sm.remove_widget(sm.get_screen('transactions'))
     def login(self,username,password):
         self.userdetails=self.validateuser(username,password)
         if self.userdetails!=0:
@@ -225,9 +237,30 @@ class MainApp(MDApp):
                 size_hint_x=.95
             ).open()
             sm.current = 'postlogin'
+            sm.remove_widget(sm.get_screen('loginpage'))
+            t4 = rsheet.col_values(4)
+            t3 = rsheet.col_values(3)
+            t2 = rsheet.col_values(2)
+            t1 = rsheet.col_values(1)
+            print(t3, t2, t1)
+            team = []
+            for i in range(0, len(t3)):
+                if t3[i] == self.uname:
+                    teamdes = t2[i]
+                    teamno = t1[i]
+                    print('user found')
+                    break
+            for i in range(len(t2)):
+                if t2[i] == teamdes and t1[i] == teamno:
+                    team.append([t3[i], t4[i]])
+            self.team = team
+            self.teamname = teamdes[0].upper() + str(teamno)
+            print(self.teamname)
+            print(self.team)
     def newtrip(self):
         sm.add_widget(NewTrip(name='newtrip'))
         sm.current = 'newtrip'
+        sm.remove_widget(sm.get_screen('postlogin'))
     def signup(self):
         Snackbar(
             text="Enter your details",
@@ -235,7 +268,10 @@ class MainApp(MDApp):
             snackbar_y="10dp",
             size_hint_x=.95
         ).open()
+        sm.add_widget(Signup(name='signup'))
+
         sm.current = 'signup'
+        sm.remove_widget(sm.get_screen('loginpage'))
     def signupSubmit(self,name,age,gender,phone,email,password):
         x=self.checksignupdata(name,age,gender,phone,email,password)
         if x=="OK":
@@ -251,9 +287,12 @@ class MainApp(MDApp):
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
+            sm.add_widget(LoginPage(name='loginpage'))
             sm.current = 'loginpage'
+            sm.remove_widget(sm.get_screen('signup'))
     def track(self):
         sm.add_widget(Overview(name='overview'))
+        sm.add_widget(Transactions(name='transactions'))
         sm.current="overview"
     def viewteam(self):
         t4 = rsheet.col_values(4)
@@ -283,8 +322,12 @@ class MainApp(MDApp):
             self.team.append(['', ''])
         sm.add_widget(TeamStatus(name='teamstatus'))
         sm.current="teamstatus"
+        sm.remove_widget(sm.get_screen('postlogin'))
     def goback(self):
+        x=sm.current
+        sm.add_widget(PostLogin(name='postlogin'))
         sm.current="postlogin"
+        sm.remove_widget(sm.get_screen(x))
     def getrcount(self):
         c=rsheet.col_values(2)
         d=rsheet.col_values(3)
@@ -313,6 +356,26 @@ class MainApp(MDApp):
         sm.current = 'postlogin'
         rsheet.sort(2,'asc')
         print(list,count)
+    def logout(self):
+        x=sm.current
+        sm.add_widget(LoginPage(name='loginpage'))
+        sm.current = 'loginpage'
+        sm.remove_widget(sm.get_screen(x))
 
-
+    def addSubmit(self,amount,purpose,category):
+        row=[self.teamname,self.uname,amount,purpose,category,datetime.now().strftime("%D %H:%M")]
+        tsheet.insert_row(row,2)
+        tsheet.sort(1,"asc")
+        Snackbar(
+            text="Transaction added successfully!!",
+            snackbar_x="10dp",
+            snackbar_y="10dp",
+            size_hint_x=.95
+        ).open()
+        sm.add_widget(Overview(name='overview'))
+        sm.add_widget(Transactions(name='transactions'))
+        sm.current='overview'
+        sm.remove_widget(sm.get_screen('addtransaction'))
+    def setcategory(self,x):
+        pass
 MainApp().run()
