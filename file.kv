@@ -371,22 +371,16 @@
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
                             on_press: app.logout()
 <Trans>:
-    id: scroll
-    do_scroll_x: False
-    do_scroll_y: True
-    size_hint: 1,0.80
-    pos_hint: {"center_x": 0.5275, "y": 0}
+    #boxlayout : box
+    #id: box
+    orientation: 'horizontal'
 
 
-    MDCard:
-        size_hint: 0.90, 2.6
-        pos_hint: 0.5,0.5
-        elevation: 10
-        orientation: 'vertical'
+
 
 
 <TCard>:
-
+    id: tcard
     orientation: "vertical"
     size_hint: 1, None
     height: box_top.height + box_bottom.height
@@ -909,7 +903,19 @@
         pos_hint: {"center_x": 0.25, "center_y": 0.85}
         on_press: app.overview()
         size_hint: 0.5,0.075
+    ScrollView:
+        id: scroll
+        do_scroll_x: False
+        do_scroll_y: True
+        size_hint: 1,0.80
+        pos_hint: {"center_x": 0.5275, "y": 0}
 
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_x: 0.97
+            height: app.lenn
+            pos_hint: {"center_x": 0.5, "y": None}
+            id: box
     MDFloatingActionButtonSpeedDial:
         data: app.data
         rotation_root_button: True

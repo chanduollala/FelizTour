@@ -13,6 +13,7 @@ from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.list import MDList
 from kivymd.uix.snackbar import Snackbar
+from kivy.properties import ObjectProperty
 #google drive api
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -85,8 +86,11 @@ class DrawerList(ButtonBehavior, MDList):
 class TeamStatus(MDScreen):
     pass
 
-class Trans(ScrollView):
-    pass
+class Trans(MDBoxLayout):
+
+    def addcard(self):
+        p=TCard()
+        #print(self.app.ids.box)
 class TCard(MDCard):
     pass
 currentscreen='helloscreen'
@@ -228,6 +232,12 @@ class MainApp(MDApp):
         for i in range(len(t2)):
             if t1[i] == self.teamname:
                 self.transactions.append([t2[i],t3[i],t4[i],t5[i],t6[i]])
+        print(self.transactions)
+        self.lenn = len(self.transactions) * 90
+        #sm.add_widget(Transactions(name='transactions'))
+        sm.current = 'transactions'
+
+
         for i in range(len(self.transactions)):
             self.money = self.transactions[i][1]
             self.paidby = self.transactions[i][0]
@@ -235,20 +245,9 @@ class MainApp(MDApp):
             self.category = self.transactions[i][3]
 
             self.paymenttime = self.transactions[i][4]
+            l=TCard()
+            sm.get_screen('transactions').ids.box.add_widget(l)
 
-        #sm.add_widget(Transactions(name='transactions'))
-        sm.current = 'transactions'
-        l=TCard()
-        sm.get_screen('transactions').add_widget(l)
-        '''for i in range(len(self.transactions)):
-            self.money=self.transactions[i][1]
-            self.paidby=self.transactions[i][0]
-            self.purpose=self.transactions[i][2]
-            self.category=self.transactions[i][3]
-
-            self.paymenttime=self.transactions[i][4]
-            p=TCard()
-            sm.get_screen('transactions').ids.scroll.addwidget(p)'''
     def plus(self, addtrs):
         sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
