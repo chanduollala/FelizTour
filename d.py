@@ -3,6 +3,7 @@ from datetime import datetime
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
+from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -85,6 +86,8 @@ class TeamStatus(MDScreen):
     pass
 
 class Trans(ScrollView):
+    pass
+class TCard(MDCard):
     pass
 currentscreen='helloscreen'
 class MainApp(MDApp):
@@ -213,9 +216,32 @@ class MainApp(MDApp):
     def overview(self):
         sm.current = 'overview'
     def transactions(self):
-        team=tsheet.col_values(1)
+        t6 = tsheet.col_values(6)
+        t5 = tsheet.col_values(5)
+        t4 = tsheet.col_values(4)
+        t3 = tsheet.col_values(3)
+        t2 = tsheet.col_values(2)
+        t1 = tsheet.col_values(1)
+        print(t3, t2, t1)
+        self.transactions = []
 
+        for i in range(len(t2)):
+            if t1[i] == self.teamname:
+                self.transactions.append([t2[i],t3[i],t4[i],t5[i],t6[i]])
+
+        for i in range(len(self.transactions)):
+            self.money=self.transactions[i][1]
+            self.paidby=self.transactions[i][0]
+            self.purpose=self.transactions[i][2]
+            self.category=self.transactions[i][3]
+
+            self.paymenttime=self.transactions[i][4]
+
+
+        #sm.add_widget(Transactions(name='transactions'))
         sm.current = 'transactions'
+        l=MDLabel(text='hello')
+        Transactions.add_widget(l)
     def plus(self, addtrs):
         sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
@@ -244,19 +270,24 @@ class MainApp(MDApp):
             t1 = rsheet.col_values(1)
             print(t3, t2, t1)
             team = []
+            teamthere=False
             for i in range(0, len(t3)):
                 if t3[i] == self.uname:
                     teamdes = t2[i]
                     teamno = t1[i]
                     print('user found')
+                    teamthere=True
                     break
-            for i in range(len(t2)):
-                if t2[i] == teamdes and t1[i] == teamno:
-                    team.append([t3[i], t4[i]])
-            self.team = team
-            self.teamname = teamdes[0].upper() + str(teamno)
-            print(self.teamname)
-            print(self.team)
+
+            if teamthere==True:
+
+                for i in range(len(t2)):
+                    if t2[i] == teamdes and t1[i] == teamno:
+                        team.append([t3[i], t4[i]])
+                self.team = team
+                self.teamname = teamdes[0].upper() + str(teamno)
+                print(self.teamname)
+                print(self.team)
     def newtrip(self):
         sm.add_widget(NewTrip(name='newtrip'))
         sm.current = 'newtrip'

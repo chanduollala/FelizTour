@@ -370,8 +370,58 @@
                             font_size: 40
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
                             on_press: app.logout()
+<Trans>:
 
+<TCard>:
+    MDCard:
+        orientation: "vertical"
+        size_hint: .5, None
+        height: box_top.height + box_bottom.height
+        focus_behavior: True
+        ripple_behavior: True
+        pos_hint: {"center_x": .5, "center_y": .5}
 
+        MDBoxLayout:
+            id: box_top
+            spacing: "20dp"
+            adaptive_height: True
+
+            FitImage:
+                source: "logo.png"
+                size_hint: .3, None
+                height: text_box.height
+
+            MDBoxLayout:
+                id: text_box
+                orientation: "vertical"
+                adaptive_height: True
+                spacing: "10dp"
+                padding: 0, "10dp", "10dp", "10dp"
+
+                MDLabel:
+                    text: app.money
+                    theme_text_color: "Primary"
+                    font_style: "H5"
+                    bold: True
+                    adaptive_height: True
+
+                MDLabel:
+                    text: app.paidby+"    "+app.paymenttime
+                    adaptive_height: True
+                    theme_text_color: "Primary"
+
+        MDSeparator:
+
+        MDBoxLayout:
+            id: box_bottom
+            adaptive_height: True
+            padding: "10dp", 0, 0, 0
+
+            MDLabel:
+                text: app.purpose
+                adaptive_height: True
+                pos_hint: {"center_y": .5}
+                theme_text_color: "Primary"
 <NewTrip>:
     ScrollView:
         do_scroll_x: True
