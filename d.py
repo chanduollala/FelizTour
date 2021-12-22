@@ -228,20 +228,27 @@ class MainApp(MDApp):
         for i in range(len(t2)):
             if t1[i] == self.teamname:
                 self.transactions.append([t2[i],t3[i],t4[i],t5[i],t6[i]])
-
         for i in range(len(self.transactions)):
+            self.money = self.transactions[i][1]
+            self.paidby = self.transactions[i][0]
+            self.purpose = self.transactions[i][2]
+            self.category = self.transactions[i][3]
+
+            self.paymenttime = self.transactions[i][4]
+
+        #sm.add_widget(Transactions(name='transactions'))
+        sm.current = 'transactions'
+        l=TCard()
+        sm.get_screen('transactions').add_widget(l)
+        '''for i in range(len(self.transactions)):
             self.money=self.transactions[i][1]
             self.paidby=self.transactions[i][0]
             self.purpose=self.transactions[i][2]
             self.category=self.transactions[i][3]
 
             self.paymenttime=self.transactions[i][4]
-
-
-        #sm.add_widget(Transactions(name='transactions'))
-        sm.current = 'transactions'
-        l=MDLabel(text='hello')
-        Transactions.add_widget(l)
+            p=TCard()
+            sm.get_screen('transactions').ids.scroll.addwidget(p)'''
     def plus(self, addtrs):
         sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
