@@ -751,7 +751,7 @@
                     pos_hint: {"top": 1}
 
                     left_action_items:
-                        [['keyboard-backspace', lambda x: app.goback]]
+                        [['keyboard-backspace', lambda x: app.goback()]]
 
 
         MDNavigationDrawer:
@@ -974,7 +974,7 @@
                     pos_hint: {"top": 1}
 
                     left_action_items:
-                        [['keyboard-backspace', lambda x: app.goback]]
+                        [['keyboard-backspace', lambda x: app.goback()]]
 
 
         MDNavigationDrawer:
@@ -1062,7 +1062,7 @@
                     pos_hint: {"top": 1}
 
                     left_action_items:
-                        [['back.png', lambda x: app.goback()]]
+                        [['keyboard-backspace', lambda x: app.goback()]]
 
 
 
@@ -1182,12 +1182,12 @@
             MDScreen:
 
                 MDToolbar:
-                    title: "Signup"
+                    title: "Add Transaction"
                     elevation: 10
                     pos_hint: {"top": 1}
 
                     left_action_items:
-                        [['keyboard-backspace', lambda x: app.goback]]
+                        [['keyboard-backspace', lambda x: app.goback()]]
 
 
         MDNavigationDrawer:
