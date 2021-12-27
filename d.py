@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import kivy
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -217,9 +217,12 @@ class MainApp(MDApp):
         self.welcome_label.text = "WELCOME"
         self.user.text = ""
         self.password.text = ""
-    def overview(self):
-        sm.current = 'overview'
+
     def transactions(self):
+        try:
+            sm.remove_widget(sm.get_screen('transactions'))
+        except kivy.uix.screenmanager.ScreenManagerException:
+            pass
         t6 = tsheet.col_values(6)
         t5 = tsheet.col_values(5)
         t4 = tsheet.col_values(4)
@@ -227,32 +230,36 @@ class MainApp(MDApp):
         t2 = tsheet.col_values(2)
         t1 = tsheet.col_values(1)
         print(t3, t2, t1)
-        self.transactions = []
+        self.transactionsar = []
 
         for i in range(len(t2)):
             if t1[i] == self.teamname:
-                self.transactions.append([t2[i],t3[i],t4[i],t5[i],t6[i]])
-        print(self.transactions)
-        self.lenn = len(self.transactions) * 90
-        #sm.add_widget(Transactions(name='transactions'))
+                self.transactionsar.append([t2[i],t3[i],t4[i],t5[i],t6[i]])
+        print(self.transactionsar)
+        self.lenn = len(self.transactionsar) * 90
+        sm.add_widget(Transactions(name='transactions'))
         sm.current = 'transactions'
+        try:
+            sm.remove_widget(sm.get_screen('overview'))
+        except kivy.uix.screenmanager.ScreenManagerException:
+            pass
+        for i in range(len(self.transactionsar)):
+            self.money = self.transactionsar[i][1]
+            self.paidby = self.transactionsar[i][0]
+            self.purpose = self.transactionsar[i][2]
+            self.category = self.transactionsar[i][3]
 
-
-        for i in range(len(self.transactions)):
-            self.money = self.transactions[i][1]
-            self.paidby = self.transactions[i][0]
-            self.purpose = self.transactions[i][2]
-            self.category = self.transactions[i][3]
-
-            self.paymenttime = self.transactions[i][4]
+            self.paymenttime = self.transactionsar[i][4]
             l=TCard()
             sm.get_screen('transactions').ids.box.add_widget(l)
+    def on_checkbox_active(self,category):
+        self.category=category
 
     def plus(self, addtrs):
         sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
-        sm.remove_widget(sm.get_screen('overview'))
-        sm.remove_widget(sm.get_screen('transactions'))
+
+
     def login(self,username,password):
         self.userdetails=self.validateuser(username,password)
         if self.userdetails!=0:
@@ -328,9 +335,66 @@ class MainApp(MDApp):
             sm.current = 'loginpage'
             sm.remove_widget(sm.get_screen('signup'))
     def track(self):
-        sm.add_widget(Overview(name='overview'))
-        sm.add_widget(Transactions(name='transactions'))
-        sm.current="overview"
+        try:
+            sm.remove_widget(sm.get_screen('overview'))
+        except kivy.uix.screenmanager.ScreenManagerException:
+            pass
+        t4 = rsheet.col_values(4)
+        t3 = rsheet.col_values(3)
+        t2 = rsheet.col_values(2)
+        t1 = rsheet.col_values(1)
+        print(t3, t2, t1)
+        team = []
+        found = False
+        for i in range(0, len(t3)):
+            if t3[i] == self.uname:
+                teamdes = t2[i]
+                teamno = t1[i]
+                print('user found')
+                found = True
+                break
+        if found==True:
+            for i in range(len(t2)):
+                if t2[i]==teamdes and t1[i]==teamno:
+                    team.append([t3[i],t4[i]])
+            self.team=team
+            t6 = tsheet.col_values(6)
+            t5 = tsheet.col_values(5)
+            t4 = tsheet.col_values(4)
+            t3 = tsheet.col_values(3)
+            t2 = tsheet.col_values(2)
+            t1 = tsheet.col_values(1)
+            print(t3, t2, t1)
+            self.transactionsar = []
+
+            for i in range(len(t2)):
+                if t1[i] == self.teamname:
+                    self.transactionsar.append([t2[i], t3[i], t4[i], t5[i], t6[i]])
+            print(self.transactionsar)
+            c=['Food','Utilities','Travelling','Parties','Others']
+            self.cwisespends={"Food":0,"Utilities":0,"Travelling":0,"Parties":0,"Others":0}
+            self.spends={self.team[0][0]:0,self.team[1][0]:0,self.team[2][0]:0,self.team[3][0]:0,}
+            for i in range(len(self.transactionsar)):
+                for j in range(len(self.team)):
+                    if self.transactionsar[i][0]==self.team[j][0]:
+                        self.spends[self.transactionsar[i][0]]=self.spends[self.transactionsar[i][0]]+int(self.transactionsar[i][1])
+                for k in c:
+                    if self.transactionsar[i][3]==k:
+                        self.cwisespends[k]=self.cwisespends[k]+int(self.transactionsar[i][1])
+
+            sm.add_widget(Overview(name='overview'))
+            sm.current="overview"
+            try:
+                sm.remove_widget(sm.get_screen('transactions'))
+            except kivy.uix.screenmanager.ScreenManagerException:
+                pass
+        else:
+            Snackbar(
+                text="Team not found. enroll in a trip macha!!",
+                snackbar_x="10dp",
+                snackbar_y="10dp",
+                size_hint_x=.95
+            ).open()
     def viewteam(self):
         t4 = rsheet.col_values(4)
         t3 = rsheet.col_values(3)
@@ -338,28 +402,39 @@ class MainApp(MDApp):
         t1 = rsheet.col_values(1)
         print(t3,t2,t1)
         team=[]
+        found=False
         for i in range(0, len(t3)):
             if t3[i] == self.uname:
                 teamdes=t2[i]
                 teamno=t1[i]
                 print('user found')
+                found=True
                 break
-        for i in range(len(t2)):
-            if t2[i]==teamdes and t1[i]==teamno:
-                team.append([t3[i],t4[i]])
-        self.team=team
-        self.teamname=teamdes[0].upper()+str(teamno)
-        print(self.teamname)
-        print(self.team)
-        if (len(self.team)==4):
-            self.ready='Hurray! Your team is ready'
+        if found==True:
+
+            for i in range(len(t2)):
+                if t2[i]==teamdes and t1[i]==teamno:
+                    team.append([t3[i],t4[i]])
+            self.team=team
+            self.teamname=teamdes[0].upper()+str(teamno)
+            print(self.teamname)
+            print(self.team)
+            if (len(self.team)==4):
+                self.ready='Hurray! Your team is ready'
+            else:
+                self.ready='Oops! You need to wait for others to join'
+            while(len(self.team)!=4):
+                self.team.append(['', ''])
+            sm.add_widget(TeamStatus(name='teamstatus'))
+            sm.current="teamstatus"
+            sm.remove_widget(sm.get_screen('postlogin'))
         else:
-            self.ready='Oops! You need to wait for others to join'
-        while(len(self.team)!=4):
-            self.team.append(['', ''])
-        sm.add_widget(TeamStatus(name='teamstatus'))
-        sm.current="teamstatus"
-        sm.remove_widget(sm.get_screen('postlogin'))
+            Snackbar(
+                text="You are currently not in any team. Register for a trip",
+                snackbar_x="10dp",
+                snackbar_y="10dp",
+                size_hint_x=.95
+            ).open()
     def goback(self):
         x=sm.current
         sm.add_widget(PostLogin(name='postlogin'))
@@ -399,8 +474,8 @@ class MainApp(MDApp):
         sm.current = 'loginpage'
         sm.remove_widget(sm.get_screen(x))
 
-    def addSubmit(self,amount,purpose,category):
-        row=[self.teamname,self.uname,amount,purpose,category,datetime.now().strftime("%D %H:%M")]
+    def addSubmit(self,amount,purpose):
+        row=[self.teamname,self.uname,amount,purpose,self.category,datetime.now().strftime("%D %H:%M")]
         tsheet.insert_row(row,2)
         tsheet.sort(1,"asc")
         Snackbar(
@@ -409,10 +484,16 @@ class MainApp(MDApp):
             snackbar_y="10dp",
             size_hint_x=.95
         ).open()
+        try:
+            sm.remove_widget(sm.get_screen('overview'))
+            sm.remove_widget(sm.get_screen('transactions'))
+        except kivy.uix.screenmanager.ScreenManagerException:
+            pass
         sm.add_widget(Overview(name='overview'))
         sm.add_widget(Transactions(name='transactions'))
-        sm.current='overview'
+        self.track()
         sm.remove_widget(sm.get_screen('addtransaction'))
+
     def setcategory(self,x):
         pass
 MainApp().run()
