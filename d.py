@@ -1,6 +1,9 @@
+# Kivy string that configures GUI.
 kv='''
-<HelloScreen>:
 
+
+<HelloScreen>:
+    # First 
     Image:
         source:'logo.png'
         size_hint_x: 1
@@ -1734,26 +1737,42 @@ class MainApp(MDApp):
         # Checks if details are valid.
         x=self.checksignupdata(name,age,gender,phone,email,password)
         if x=="OK" and name!="" and age!="" and gender!="" and phone!="" and email!="" and password!="":
+
+            # Generating username.
             username=name[:5]+phone[-3:]
+
+            # Sending One-Time Password.
             payload = f"sender_id=FSTSMS&message=welcome to feliz tour. your username:{username}&language=english&route=p&numbers={phone}"
             response = requests.request("POST", url, data=payload, headers=headers)
             print(response.text)
+
+            # Adding user details to users database.
             newrow=["001",name,age,gender,phone,email,username,password]
             usheet.insert_row(newrow,2)
+
             Snackbar(
                 text="Account created successfully. Login to continue",
                 snackbar_x="10dp",
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
+
+            # Returning to login page after creating account successfully.
             sm.add_widget(LoginPage(name='loginpage'))
             sm.current = 'loginpage'
             sm.remove_widget(sm.get_screen('signup'))
+
+
+    # Method that is executed when user clicks on Track expenses button or Overview Tab.
     def track(self):
+
+        # Removing screen is it is already present.
         try:
             sm.remove_widget(sm.get_screen('overview'))
         except kivy.uix.screenmanager.ScreenManagerException:
             pass
+
+        # Checking if user is enrolled in a trip and team is assigned.
         t4 = rsheet.col_values(4)
         t3 = rsheet.col_values(3)
         t2 = rsheet.col_values(2)
@@ -1769,10 +1788,13 @@ class MainApp(MDApp):
                 found = True
                 break
         if found==True:
+            # User is in a team.
             for i in range(len(t2)):
                 if t2[i]==teamdes and t1[i]==teamno:
                     team.append([t3[i],t4[i]])
             self.team=team
+
+            # Getting all values of transactions sheet.
             t6 = tsheet.col_values(6)
             t5 = tsheet.col_values(5)
             t4 = tsheet.col_values(4)
@@ -1782,35 +1804,52 @@ class MainApp(MDApp):
             print(t3, t2, t1)
             self.transactionsar = []
 
+            # Adding transactions related to current team to local list.
             for i in range(len(t2)):
                 if t1[i] == self.teamname:
                     self.transactionsar.append([t2[i], t3[i], t4[i], t5[i], t6[i]])
             print(self.transactionsar)
+
+            # Declaring dictionaries for storing spends.
             c=['Food','Utilities','Travelling','Parties','Others']
             self.cwisespends={"Food":0,"Utilities":0,"Travelling":0,"Parties":0,"Others":0}
             self.spends={self.team[0][0]:0,self.team[1][0]:0,self.team[2][0]:0,self.team[3][0]:0,}
+
+            # Updating values of spends in every step.
             for i in range(len(self.transactionsar)):
                 for j in range(len(self.team)):
                     if self.transactionsar[i][0]==self.team[j][0]:
+                        # Analysing spends based on who spent how much.
                         self.spends[self.transactionsar[i][0]]=self.spends[self.transactionsar[i][0]]+int(self.transactionsar[i][1])
                 for k in c:
                     if self.transactionsar[i][3]==k:
+                        # Analysing spends based on category the spend belong to.
                         self.cwisespends[k]=self.cwisespends[k]+int(self.transactionsar[i][1])
 
+            # Adding Overview Screen and set it to current.
             sm.add_widget(Overview(name='overview'))
             sm.current="overview"
+
+            # Removing Transactions screen if already exits.(outdated).
             try:
                 sm.remove_widget(sm.get_screen('transactions'))
             except kivy.uix.screenmanager.ScreenManagerException:
                 pass
         else:
+
+            # User is not enrolled for a trip. so no team is allocated.
             Snackbar(
                 text="Team not found. enroll in a trip macha!!",
                 snackbar_x="10dp",
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
+
+    # Method that runs when user clicks on view teams button.
+    # This gets the assigned team details and displays.
     def viewteam(self):
+
+        # Checking if user placed a request.
         t4 = rsheet.col_values(4)
         t3 = rsheet.col_values(3)
         t2 = rsheet.col_values(2)
@@ -1820,13 +1859,15 @@ class MainApp(MDApp):
         found=False
         for i in range(0, len(t3)):
             if t3[i] == self.uname:
+                # User found in existing requests and team name retrieved.
                 teamdes=t2[i]
                 teamno=t1[i]
                 print('user found')
                 found=True
                 break
         if found==True:
-
+            # Team found.
+            # Finding all other teammates.
             for i in range(len(t2)):
                 if t2[i]==teamdes and t1[i]==teamno:
                     team.append([t3[i],t4[i]])
@@ -1834,27 +1875,50 @@ class MainApp(MDApp):
             self.teamname=teamdes[0].upper()+str(teamno)
             print(self.teamname)
             print(self.team)
+
+            # Checking if team is ready to go.(4 people)
             if (len(self.team)==4):
+                # Team has 4 people. Ready
                 self.ready='Hurray! Your team is ready'
             else:
+                # Team has less than four people. Not Ready.
                 self.ready='Oops! You need to wait for others to join'
+
+            # Random declaration.
             while(len(self.team)!=4):
                 self.team.append(['', ''])
+
+            # Adding newScreen and setting it to current.
             sm.add_widget(TeamStatus(name='teamstatus'))
             sm.current="teamstatus"
+
+            # Removing previous screen.
             sm.remove_widget(sm.get_screen('postlogin'))
         else:
+
+            # User is not enrolled in any trip.
+            # User doesnt have a team yet.
             Snackbar(
                 text="You are currently not in any team. Register for a trip",
                 snackbar_x="10dp",
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
+
+    # Method that is executed when user clicks on back button.
     def goback(self):
+        # This method returns user to Dashboard screen.
         x=sm.current
+
+        # Dashboard screen is recreated and set to current.
         sm.add_widget(PostLogin(name='postlogin'))
         sm.current="postlogin"
+
+        # Removes previous screen.
         sm.remove_widget(sm.get_screen(x))
+
+    # Method to get count of requests to each destination.
+    # Used in backend.
     def getrcount(self):
         c=rsheet.col_values(2)
         d=rsheet.col_values(3)
@@ -1863,52 +1927,103 @@ class MainApp(MDApp):
         for i in range(len(c)):
             list[c[i]].append(d[i])
 
+        # Returns dictionary containing destinations and respective request count.
         return list
+
+    # Method that is executed when user clicks on go button in selecting destination.
     def go(self,x):
 
+        # Destination selected is passed as argument to function.
         destination=x
         self.requestplaced=True
+
+        # Assigning team to the user when request is placed.
+
+        # getting count of each destination requests.
         list = self.getrcount()
         count = {"Goa": len(list['Goa']), "Manali": len(list['Manali']), "Agra": len(list['Agra'])}
+
+        # Assigning team number based on the number of the current request. (divided by 4).
         teamno=int((count[x]/4)+1)
+
+        # Adding user details to requests sheet in google drive.
         newrow = [teamno, destination,self.uname,self.phonenumber]
         rsheet.insert_row(newrow, 1)
+
+        # Confirmation note.
         Snackbar(
             text="Request placed. Check team status",
             snackbar_x="10dp",
             snackbar_y="10dp",
             size_hint_x=.95
         ).open()
+
+        # Returning to Dashboard screen after placing Trip Request.
+        # Recreate dashboard screen and set it to current.
         sm.add_widget(PostLogin(name='postlogin'))
         sm.current = 'postlogin'
+
+        # Sort the requests sheet in database based on teams.
         rsheet.sort(2,'asc')
+
+
         print(list,count)
+
+    # Method that is executed when user clicks on logout button in navigation drawer.
     def logout(self):
+        # Shifts from current screen to Login page
         x=sm.current
+
+        # Recreating loginpage screen and setting it to current.
         sm.add_widget(LoginPage(name='loginpage'))
         sm.current = 'loginpage'
+
+        # Remove previous screen.
         sm.remove_widget(sm.get_screen(x))
 
+
+    # Method that is executed when user clicks on Submit button in Add transaction screen.
+    # This method adds transaction to transactions list.
     def addSubmit(self,amount,purpose):
+
+        # amount and purpose are passed as arguments from GUI.
+        # Adding transaction details to transactions sheet in database.
         row=[self.teamname,self.uname,amount,purpose,self.category,datetime.now().strftime("%D %H:%M")]
         tsheet.insert_row(row,2)
+
+        # Sorting the transactions sheet in database.
         tsheet.sort(1,"asc")
+
+        # Confirmation dialogue.
         Snackbar(
             text="Transaction added successfully!!",
             snackbar_x="10dp",
             snackbar_y="10dp",
             size_hint_x=.95
         ).open()
+
+        # Remove Overview and Transaction screens as they are outdated.
         try:
             sm.remove_widget(sm.get_screen('overview'))
             sm.remove_widget(sm.get_screen('transactions'))
         except kivy.uix.screenmanager.ScreenManagerException:
             pass
+
+        # Reloading Overview and Transactions Screens.
         sm.add_widget(Overview(name='overview'))
         sm.add_widget(Transactions(name='transactions'))
+
+        # Switching to overview screen.
         self.track()
+
+        # Removing previous screen.
         sm.remove_widget(sm.get_screen('addtransaction'))
 
+    # Method that is executed when user sets a category.
     def setcategory(self,x):
         pass
+
+
+# Running Main App.
+# Initiating GUI.
 MainApp().run()
