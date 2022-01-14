@@ -1,24 +1,33 @@
 
 <HelloScreen>:
+    # Hello Screen is the screen which is displayed on app startup.
 
     Image:
+        # It has background image embedded with App logo and author names.
+        # Background image covers whole window of GUI.
+
         source:'logo.png'
         size_hint_x: 1
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
+
     MDRaisedButton:
+        # Button floating above background image.
         text: "Continue to APP"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.15}
+        # On clicking on this button, continue_to_app() function from main will be executed.
         on_press: app.continue_to_app()
 
 
 
 <LoginPage>:
 
-
+    # Login Page is the screen which is displayed when use clicks on continue to app button in HelloScreen.
 
     MDCard:
+        # This card is a white widget that remains in background.
+        # All other widgets are placed above this card.
         size_hint: 0.8, 0.75
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         elevation: 10
@@ -27,6 +36,7 @@
         orientation: 'vertical'
 
     MDLabel:
+        # Label prints 'Welcome
         id: welcome_label
         text: "Welcome"
         font_size: 35
