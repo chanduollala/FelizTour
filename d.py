@@ -1235,9 +1235,12 @@ kv='''
 
 
 
-from datetime import datetime
+# Kivy package implements Graphical User Interface(GUI).
 import kivy
+# Builder loads the GUI configuration file ( .kv extension) or string.
 from kivy.lang import Builder
+# KivyMD is extended version of Kivy.
+# It provides GUI.
 from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivymd.uix.card import MDCard
@@ -1251,27 +1254,55 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.list import MDList
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import ObjectProperty
-#google drive api
+# datetime module is used to get current time and date.
+from datetime import datetime
+
+
+#Configuring Google Drive API and Google Spreadsheets API.
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
-
-# use creds to create a client to interact with the Google Drive API
 scope = ['https://spreadsheets.google.com/feeds',
          'https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
+
+
+
+# Credentials used to create a client to interact with the Google Drive API.
+
+# File named 'apifile.json' has credentials of Google Developer account used to authorise APIs.
+# Contents of api.json file
+
+#   {
+#     "type": "service_account",
+#     "project_id": "gold-atlas-326210",
+#     "private_key_id": "a77d1d86cfa5e49d03143ce2eecc92b4b67d6b62",
+#     "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDMg0kkbZ4LhzAv\nDSmiwLecF3sYrUed8V6yFozwLgQZkiGpLYWYALcPHfZ0dTIJudymUKEgOtljMlpV\nY1ijKQkPu3w2WN7Cbb/j/gI7egt6seCwTIdhaEcVBSfPNTKNGSE+oYEaMoZu+Ra8\nrU+BqT1QA34m5UbyoSJfS6q6rsWPda4XdzHsS491o1t5sqrHtzEn4y5BZQTpRQJR\n05TIcBAc7z2dE1nNJZ00qryPBrI8JMm+OTzxyk+EjLnuGkeZBGD9qWNMpvGqw0zf\nEK2SPJYTbrJbC9b+lMMEU6r97nkf2iru2VMJyCAt9sA1zZZihVH+1oatK1VTKmWD\nD0q7lor9AgMBAAECggEAW0BxEFoA3O/zJetfmokW5ATuHfKjM+wQ7rF1LW260pYL\ngusW4t3e0FX0M75fF0vhEiyD2Fepy8MZ32O2lwamTmi/YZiBvIsvxdD+uf8YxCQ+\nNyvOdD4NCWoFe0UnSyHdXY6+hivpI/bsmD9UbGxROTR1w3EmGPig15hxk16MNBfn\nep8oaFRWXn6gdojfKbPQOJwzTCjNdWN27KlC9H4jz1ZHmJtIbP7ykyVTCvB9U6cE\nJY92E11tROKlACVRwmRX4lBIrF5PSb4hcwUStyefjTWnHHdTbDv5ieKZXV/KrbT5\ngrmJtuSdgNXNYTtKTOFA57gRRzzQpuYOU5svtr4w2QKBgQD0B1Y18vOUD6jhsxKY\n7IkoaYOMAS3C/84AN/Lx4mEvnDI5HBu5EH/svpwJ9eilujPBcoQ/B+oQWISxalLv\nq2WZhbOEahDGSYSRvCk3aJQdobhe74EwqK9UpQdCPWEEH0+xo6VQmIuofuyD74Do\ntW2YSJHDxGsEc2csiGy4xzh1NwKBgQDWi69J9r7t38NC3/L+zSEGjSJnyPF4Pazl\n+v1oNd9R1/e8HRIFwwItCY38pEHaQV13wN0Swneo2p1waBgUHj3znuYsg7s9OJyR\nsygf9q+tk6/PRzTbN3z91736wq21UTnICN6hqnzqNyBh7XPio7qvJUAB9ySS4sAc\n3MlOXsVbawKBgQDaQ/2uP2HyWpdZWIwXz+lWBhotDZjaw2aD94cLJsp6hSC+yA9b\n1hA1tr9mgVbXdNZ5/m2e2vtWJ3Z4IXuQ9yLm0BmjJCNg170FhODwuE9SuaVo9Jv+\n48H+2aTGcJPn1gG4B4EDt42i5fOyhnQssKoX/UCzc2mtD3OG93cXRsmOvQKBgAVB\nFIDmNxTSRxDrNSNCWM21RSNvi2JbeFGFjRExSI/TjzCfMaLMfNAnjL+kMiyrLyPQ\nqFleQ9nxyKtJEVXky7WcrZxneX1tVoBG9/OYcgL5O/QClWvM9xWsY+2xONnY7GZW\nuUUSTM7bnMJpM05YnijN67xglhe2z+elDJULwx+TAoGACGFwFcWFB4YUHRZhtHs1\nPHqHoPgJDi3v3L5100JGQx6QB6ujfcDpcrXL8eIbtP7/+Oftuiwcn0tYHQoIX4aZ\nDBo8GDRPZ8kzotDIk4z8xMH5Xu1tqCywnmL3nia77V02qqLGgQkI+AlpWBE/Isj1\nJGE5xgVvuY8+59OoFGy9eIE=\n-----END PRIVATE KEY-----\n",
+#     "client_email": "chandu@gold-atlas-326210.iam.gserviceaccount.com",
+#     "client_id": "117609925135611496821",
+#     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+#     "token_uri": "https://oauth2.googleapis.com/token",
+#     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+#     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chandu%40gold-atlas-326210.iam.gserviceaccount.com"
+#   }
+
+# Credentials belong to Chandrashekar Ollala. Not to be misused.
 creds = ServiceAccountCredentials.from_json_keyfile_name('apifile.json', scope)
 client = gspread.authorize(creds)
 
-# Find a workbook by name and open the first sheet
-# Make sure you use the right name here.
+
+
+# Mentioning spreadsheets saved in Drive cloud of Chandrashekar Ollala.
+# Four sheets are used to store and verify data.
+
 usheet = client.open("FelizTourUsers").sheet1
 tsheet= client.open("FelizTourTransactions").sheet1
 rsheet= client.open("FelizTourTripRequests").sheet1
 msheet= client.open("FelizTourTeams").sheet1
 
 
-# SMS for sending SMS
+# Fast2SMS API is used to send One-Time Passwords to Users when they signup.
+# Configuring Fast2SMS API using requests module.
+
 import requests
 url = "https://www.fast2sms.com/dev/bulk"
 
@@ -1282,15 +1313,20 @@ headers = {
 }
 
 
+# Regular Expressions are used in app to verify the pattern of email and phone number input.
 import re
 
 
-
+# Builder loads GUI configuration string saved as kv.
 Builder.load_string(kv)
-sm = ScreenManager()
-#Window.size = (300,550)
 
-userdetails=[]
+# Screen Manager is used to switch between different screens.
+sm = ScreenManager()
+
+# Window.size = (300,550)
+
+
+# Screens and Widgets mentioned as classes.
 
 class HelloScreen(MDScreen):
     pass
@@ -1312,8 +1348,10 @@ class Signup(MDScreen):
 
 class NewTrip(MDScreen):
     pass
+
 class AddTransaction(MDScreen):
     pass
+
 class ContentNavigationDrawer(MDBoxLayout):
     pass
 
@@ -1324,40 +1362,61 @@ class TeamStatus(MDScreen):
     pass
 
 class Trans(MDBoxLayout):
-
     def addcard(self):
         p=TCard()
-        #print(self.app.ids.box)
+
 class TCard(MDCard):
     pass
+
+# Global variables.
+userdetails=[]
 currentscreen='helloscreen'
+
+# Main App Class that runs GUI.
+
 class MainApp(MDApp):
 
+    # Data for action button in transactions screen and overview screen.
     data = {
         'Add Transaction': 'Addtrs',
         "hi": "hello"
     }
+
+    # Default display name.
     displayname="User"
 
+    # main method of GUI.
     def build(self):
 
+        # Setting display theme for GUI.
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Red"
+
+        # Adding screens (HelloScreen and New Trip)
         sm.add_widget(HelloScreen(name='helloscreen'))
-
-
-
         sm.add_widget(NewTrip(name='newtrip'))
 
-
-        #sm.add_widget(TeamStatus(name='teamstatus'))
-
+        # Current screen set to HelloScreen.(on app start).
         sm.current = 'helloscreen'
+
         return sm
+
+    # Method to validate Login credentials entered by verifying.
+
+    # Userdetails global variable is updated only if Username is found and Entered Password matches with correct password.
+
     def validateuser(self,username,password):
+
+        # gets all the usernames that are registered
         usernames=usheet.col_values(7)
 
+        # Verifies the entered input with all usernames.
+
+
         if username not in usernames:
+
+            # Username not found.
+            # SnackBar is a widget that shows a dialogue by popping up from bottom of the screen.
             Snackbar(
                 text="Username not found!",
                 snackbar_x="10dp",
@@ -1365,8 +1424,14 @@ class MainApp(MDApp):
                 size_hint_x=.95
             ).open()
             return 0
+
         else:
+            # Username matched with one of the usernames in cloud.
+
             for i in range(0,len(usernames)):
+
+                # Retrieves all the details of username found.
+
                 if usernames[i]==username:
                     column=i
                     user_keys=usheet.row_values(1)
@@ -1374,9 +1439,15 @@ class MainApp(MDApp):
                     userdetails= {user_keys[i]: user_values[i] for i in range(len(user_keys))}
                     print(userdetails)
                     print("user found")
+
+                    # Validating Password.
                     if password==userdetails["password"]:
+
+                        # Entered password matches with correct password.
                         return userdetails
                     else:
+
+                        # Entered password doesn't mtch with correct password.
                         Snackbar(
                             text="Password incorrect",
                             snackbar_x="10dp",
@@ -1386,14 +1457,36 @@ class MainApp(MDApp):
 
             return 0
 
+
+    # Method to check Data entered during signup.
+    # Entries are rejected if data entered doesn't match prescribed pattern.
+
     def checksignupdata(self,name,age,gender,phone,email,password):
-        return "OK"
-        namepattern='[a-zA-Z\s]'
-        phonepattern='^[0-9]{10}$'
+
+        # Defining patterns for email, name and phone number.
+        namepattern='^[a-zA-Z]([a-zA-Z\s]){0,}$'
+        phonepattern='^[6-9]([0-9]){9}$'
         emailpattern=r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-        if (re.search(namepattern,name)):
+
+        # Ensuring none of the fields are blank.
+        if name=="" or age=="" or gender=="" or phone=="" or email=="" or password=="":
+            Snackbar(
+                text="Fields cant be empty",
+                snackbar_x="10dp",
+                snackbar_y="10dp",
+                size_hint_x=.95
+            ).open()
+            return 0
+
+        # Checking if name matches the pattern.
+        if (re.match(namepattern,name)):
+
+            # Name field met criteria.
+            print(re.match(namepattern,name))
             pass
         else:
+            # Name field did not meet criteria.
+            print(re.match(namepattern, name))
             Snackbar(
                 text="Name has only alphabets and spaces",
                 snackbar_x="10dp",
@@ -1401,9 +1494,14 @@ class MainApp(MDApp):
                 size_hint_x=.95
             ).open()
             return 0
+
+        # Checking if age falls in possible range.
         if (int(age)>10 and int(age)<100):
+
+            # Age field met criteria.
             pass
         else:
+            # Age field did not meet criteria.
             Snackbar(
                 text="Age invalid!",
                 snackbar_x="10dp",
@@ -1412,9 +1510,14 @@ class MainApp(MDApp):
             ).open()
             return 0
 
+        # Checking if gender is selected correctly.
         if (gender in ["male","female","Male","Female","M","F"]):
+
+            # Gender entered is one of the given options.
             pass
         else:
+            # Gender entered is not one of the given options.
+
             Snackbar(
                 text="Gender: Invalid Input",
                 snackbar_x="10dp",
@@ -1423,9 +1526,14 @@ class MainApp(MDApp):
             ).open()
             return 0
 
-        if (re.search(phonepattern,phone)):
+        # Checking if entered phonenumber matches the given pattern.
+        if (re.match('^[0-9]([0-9]){9}$',phone)):
+            # Phone number pattern matched.
             pass
         else:
+
+            # Phone number pattered did not match.
+            print(re.match(phonepattern, phone))
             Snackbar(
                 text="Invalid Phone number",
                 snackbar_x="10dp",
@@ -1434,32 +1542,48 @@ class MainApp(MDApp):
             ).open()
             return 0
 
-        if (re.search(emailpattern,email)):
+        # Checking if entered email matches with the given pattern.
+        if (re.match(emailpattern,email)):
+
+            # Email pattern matched.
             pass
         else:
+            # Email pattern did not match.
             Snackbar(
-                text="Invalid Phone number",
+                text="Invalid Email",
                 snackbar_x="10dp",
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
             return 0
 
+
+        # All test cases passed.
+        # Giving clearance for details to be saved in database.
         return "OK"
+
+    # Method that runs when user clicks on Continue to app button in HelloScreen.
     def continue_to_app(self):
-        # self.root.ids.welcome_label.text = f'Sup {self.root.ids.user.text}!'
+
+        # Creating new screen for Userlogin and setting current screen to login screen.
         sm.add_widget(LoginPage(name='loginpage'))
         sm.current = 'loginpage'
+
+
     def clear(self):
         self.welcome_label.text = "WELCOME"
         self.user.text = ""
         self.password.text = ""
 
+    # Method that loads transactions screen
     def transactions(self):
+        # Removing Transactions screen if it is already there as it needs to be reloaded.
         try:
             sm.remove_widget(sm.get_screen('transactions'))
         except kivy.uix.screenmanager.ScreenManagerException:
             pass
+
+        # Getting values from Transactions Sheet(Google Drive).
         t6 = tsheet.col_values(6)
         t5 = tsheet.col_values(5)
         t4 = tsheet.col_values(4)
@@ -1467,19 +1591,32 @@ class MainApp(MDApp):
         t2 = tsheet.col_values(2)
         t1 = tsheet.col_values(1)
         print(t3, t2, t1)
+
+        # List to store the transactions.
         self.transactionsar = []
 
+        # Filtering transactions related to team that contains current user.
         for i in range(len(t2)):
             if t1[i] == self.teamname:
                 self.transactionsar.append([t2[i],t3[i],t4[i],t5[i],t6[i]])
         print(self.transactionsar)
+
+        # Variable for .kv file.
         self.lenn = len(self.transactionsar) * 90
+
+        # Creating Transactions screen again and setting it to current.
         sm.add_widget(Transactions(name='transactions'))
         sm.current = 'transactions'
+
+        # Updating Overview Screen with reloaded details.
+
+        # Removing Overview screen if already exists.
         try:
             sm.remove_widget(sm.get_screen('overview'))
         except kivy.uix.screenmanager.ScreenManagerException:
             pass
+
+        # Loading variables for usage in GUI.
         for i in range(len(self.transactionsar)):
             self.money = self.transactionsar[i][1]
             self.paidby = self.transactionsar[i][0]
@@ -1487,24 +1624,37 @@ class MainApp(MDApp):
             self.category = self.transactionsar[i][3]
 
             self.paymenttime = self.transactionsar[i][4]
+
+            # Adding each transaction as a card to transactions screen.
+            # Class Tcard defines card that contains all details of a transaction
             l=TCard()
             sm.get_screen('transactions').ids.box.add_widget(l)
+
+    # Method to select category when clicked against its checkbox (Add Transaction screen).
     def on_checkbox_active(self,category):
         self.category=category
 
+    # Method that executes when Add Transaction button is clicked.
     def plus(self, addtrs):
+        # Creating new Screen and setting it to current.
         sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
 
-
+    # Method that is executed when login button is clicked.
+    # Username and Passsword entered are read and passsed as arguments.
     def login(self,username,password):
+
+        # Calls validate user method.
         self.userdetails=self.validateuser(username,password)
+
         if self.userdetails!=0:
+            # Setting variable for use in .kv file.
             self.uname=self.userdetails["Name"]
             self.phonenumber=self.userdetails["Phone"]
             self.loggedinusername=self.userdetails["Usename"]
             self.gender=self.userdetails["Gender"]
 
+            # Adding dashboard screen(Postlogin page)
             sm.add_widget(PostLogin(name='postlogin'))
             Snackbar(
                 text="Logged in succesfully as "+self.uname,
@@ -1512,15 +1662,24 @@ class MainApp(MDApp):
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
+            # setting current screen to dashboard page.
             sm.current = 'postlogin'
+
+            # Remove pre exixting login page.
             sm.remove_widget(sm.get_screen('loginpage'))
+
+            # Reading trip requests sheet.
             t4 = rsheet.col_values(4)
             t3 = rsheet.col_values(3)
             t2 = rsheet.col_values(2)
             t1 = rsheet.col_values(1)
             print(t3, t2, t1)
+
+            # List containing team member details.
             team = []
             teamthere=False
+
+            # Finding team number of logged in user.
             for i in range(0, len(t3)):
                 if t3[i] == self.uname:
                     teamdes = t2[i]
@@ -1529,8 +1688,9 @@ class MainApp(MDApp):
                     teamthere=True
                     break
 
-            if teamthere==True:
 
+            if teamthere==True:
+                # Retrieving the details of co-team members.
                 for i in range(len(t2)):
                     if t2[i] == teamdes and t1[i] == teamno:
                         team.append([t3[i], t4[i]])
@@ -1538,10 +1698,18 @@ class MainApp(MDApp):
                 self.teamname = teamdes[0].upper() + str(teamno)
                 print(self.teamname)
                 print(self.team)
+
+    # Method that is executed when new trip button is clicked.
     def newtrip(self):
+        # Add screen.
+        # Set current screen to added screen.
+        # Remove previous screen.
         sm.add_widget(NewTrip(name='newtrip'))
         sm.current = 'newtrip'
         sm.remove_widget(sm.get_screen('postlogin'))
+
+
+    # Method executed when signup button from login oage is clicked.
     def signup(self):
         Snackbar(
             text="Enter your details",
@@ -1549,13 +1717,23 @@ class MainApp(MDApp):
             snackbar_y="10dp",
             size_hint_x=.95
         ).open()
+
+        # Add signup screen.
+        # Set current screen to signup screen.
+        # Remove previous screen.
         sm.add_widget(Signup(name='signup'))
 
         sm.current = 'signup'
         sm.remove_widget(sm.get_screen('loginpage'))
+
+
+    # Method that is executed when user clicks on submit button in signup screen.
+    # All values entered as details are passed as arguments.
     def signupSubmit(self,name,age,gender,phone,email,password):
+
+        # Checks if details are valid.
         x=self.checksignupdata(name,age,gender,phone,email,password)
-        if x=="OK":
+        if x=="OK" and name!="" and age!="" and gender!="" and phone!="" and email!="" and password!="":
             username=name[:5]+phone[-3:]
             payload = f"sender_id=FSTSMS&message=welcome to feliz tour. your username:{username}&language=english&route=p&numbers={phone}"
             response = requests.request("POST", url, data=payload, headers=headers)
