@@ -13,9 +13,11 @@
 
     MDRaisedButton:
         # Button floating above background image.
+
         text: "Continue to APP"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.15}
+
         # On clicking on this button, continue_to_app() function from main will be executed.
         on_press: app.continue_to_app()
 
@@ -28,6 +30,7 @@
     MDCard:
         # This card is a white widget that remains in background.
         # All other widgets are placed above this card.
+
         size_hint: 0.8, 0.75
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         elevation: 10
@@ -36,17 +39,20 @@
         orientation: 'vertical'
 
     MDLabel:
-        # Label prints 'Welcome
+        # This label prints 'Welcome' on top of screen.
+
         id: welcome_label
         text: "Welcome"
         font_size: 35
         pos_hint: {"center_x": 0.5, "center_y": 0.75}
         halign: 'center'
         size_hint_y: None
-
         padding_y: 15
 
     MDTextField:
+        # Text Field to enter username for logging in.
+        # Positioned below welcome label.
+
         id: user
         hint_text: "Username"
         icon_right: "account"
@@ -56,6 +62,9 @@
         pos_hint: {"center_x": 0.5, "center_y": 0.65}
 
     MDTextField:
+        # Text Field to enter passsword for logging in.
+        # Positioned below Username text field.
+
         id: password
         hint_text: "Password"
         icon_right: "eye-off"
@@ -66,26 +75,36 @@
         password: True
 
     MDRoundFlatButton:
+        # Button positioned below username and password text fields.
+
         text: "Login"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
-        on_press: app.login(root.ids.user.text,root.ids.password.text)
         size_hint_x: 0.6
 
+        # On clicking on this button, login() function from main will be executed.
+        # Text entered in Username and Password text fields are passed as arguments.
+        on_press: app.login(root.ids.user.text,root.ids.password.text)
+
+
     MDLabel:
+        # This Label asks user if he is new to app.
         text: "New User? Signup!"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.3}
         halign: 'center'
         size_hint_y: None
-
         padding_y: 15
 
 
     MDRoundFlatButton:
+        # Button positioned below at bottom of the screen.
+
         text: "Signup"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.2}
+
+        # On clicking on this button, login() function from main will be executed.
         on_press: app.signup()
         size_hint_x: 0.6
 
