@@ -2,26 +2,39 @@
 kv='''
 
 
+
 <HelloScreen>:
-    # First 
+    # Hello Screen is the screen which is displayed on app startup.
+
     Image:
+        # It has background image embedded with App logo and author names.
+        # Background image covers whole window of GUI.
+
         source:'logo.png'
         size_hint_x: 1
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
+
     MDRaisedButton:
+        # Button floating above background image.
+
         text: "Continue to APP"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.15}
+
+        # On clicking on this button, continue_to_app() function from main will be executed.
         on_press: app.continue_to_app()
 
 
 
 <LoginPage>:
 
-
+    # Login Page is the screen which is displayed when use clicks on continue to app button in HelloScreen.
 
     MDCard:
+        # This card is a white widget that remains in background.
+        # All other widgets are placed above this card.
+
         size_hint: 0.8, 0.75
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         elevation: 10
@@ -30,16 +43,20 @@ kv='''
         orientation: 'vertical'
 
     MDLabel:
+        # This label prints 'Welcome' on top of screen.
+
         id: welcome_label
         text: "Welcome"
         font_size: 35
         pos_hint: {"center_x": 0.5, "center_y": 0.75}
         halign: 'center'
         size_hint_y: None
-
         padding_y: 15
 
     MDTextField:
+        # Text Field to enter username for logging in.
+        # Positioned below welcome label.
+
         id: user
         hint_text: "Username"
         icon_right: "account"
@@ -49,6 +66,9 @@ kv='''
         pos_hint: {"center_x": 0.5, "center_y": 0.65}
 
     MDTextField:
+        # Text Field to enter passsword for logging in.
+        # Positioned below Username text field.
+
         id: password
         hint_text: "Password"
         icon_right: "eye-off"
@@ -59,37 +79,46 @@ kv='''
         password: True
 
     MDRoundFlatButton:
+        # Button positioned below username and password text fields.
+
         text: "Login"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
-        on_press: app.login(root.ids.user.text,root.ids.password.text)
         size_hint_x: 0.6
 
+        # On clicking on this button, login() function from main will be executed.
+        # Text entered in Username and Password text fields are passed as arguments.
+        on_press: app.login(root.ids.user.text,root.ids.password.text)
+
+
     MDLabel:
+        # This Label asks user if he is new to app.
         text: "New User? Signup!"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.3}
         halign: 'center'
         size_hint_y: None
-
         padding_y: 15
 
 
     MDRoundFlatButton:
+        # Button positioned below at bottom of the screen.
+
         text: "Signup"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.2}
+
+        # On clicking on this button, login() function from main will be executed.
         on_press: app.signup()
         size_hint_x: 0.6
 
-
-
-
+    # Collecion of widgets to create a content navigation drawer.
     Widget:
         size_hint_y: None
         height: 10
     MDNavigationLayout:
-
+        # On clicking top left button, a screen comes out that can be called as Drawer.
+        # However, Drawer will not be there in Login screen.
         ScreenManager:
 
             MDScreen:
@@ -99,60 +128,35 @@ kv='''
                     elevation: 10
                     pos_hint: {"top": 1}
 
+                    # There will be no items in Login page content drawer.
+                    # There wil be no button on top left.
                     left_action_items:
                         []
 
 
-        MDNavigationDrawer:
-            id: nav_drawer
-
-
-            ContentNavigationDrawer:
-                orientation: "vertical"
-                padding: "8dp"
-                spacing: "8dp"
-
-                AnchorLayout:
-                    anchor_x: "left"
-                    size_hint_y: None
-                    height:
-
-                MDLabel:
-                    text: "KivyMD library"
-                    font_style: "Button"
-                    size_hint_y: None
-
-
-                MDLabel:
-                    text: "kivydevelopment@gmail.com"
-                    font_style: "Caption"
-                    size_hint_y: None
-
-
-                ScrollView:
-
-                    DrawerList:
-                        id: md_list
-
-                        MDFlatButton:
-                            text: "LOG IN"
-                            font_size: 12
-                            pos_hint: {"center_x": 0.3, "center_y": 0.3}
-                            on_press: app.login()
 
 
 
 <Signup>:
-
+    # Signup Page is the screen which is displayed when user clicks on signup button in LoginScreen.
+    # This screen takes user input to fill all the details of the user to store it to database.
 
     MDCard:
+        # This blank Card is displayed in the background.
+
         size_hint: 0.95, 0.8
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         elevation: 10
         padding: 25
         spacing: 25
         orientation: 'vertical'
+
     MDTextField:
+
+        # This text field asks for Name of the new user.
+        # The text entered in this field can be accessed by the name 'signup_name.text'.
+        # Text will be validated for text-only input.
+
         id: signup_name
         hint_text: "Name"
         size_hint_x: 0.7
@@ -165,6 +169,10 @@ kv='''
 
 
     MDTextField:
+        # This text field asks for Age of the new user.
+        # The text entered in this field can be accessed by the name 'signup_age.text'.
+        # Text will be validated for number-only input between 10 to 100.
+
         id: signup_age
         hint_text: "Age"
         size_hint_x: 0.7
@@ -178,6 +186,10 @@ kv='''
         helper_text: "Enter text"
 
     MDTextField:
+        # This text field asks for Gender of the new user.
+        # The text entered in this field can be accessed by the name 'signup_gender.text'.
+        # Text will be validated for some keywords only.
+
         id: signup_gender
         hint_text: "Gender"
         size_hint_x: 0.7
@@ -191,6 +203,10 @@ kv='''
 
 
     MDTextField:
+        # This text field asks for Phone number of the new user.
+        # The text entered in this field can be accessed by the name 'signup_phn.text'.
+        # Text will be validated for number-only input of 10-digit length.
+
         id: signup_phn
         hint_text: "Phone number"
         size_hint_x: 0.7
@@ -201,6 +217,11 @@ kv='''
         helper_text: "Enter 10-digit phone number"
 
     MDTextField:
+
+        # This text field asks for Email of the new user.
+        # The text entered in this field can be accessed by the name 'signup_email.text'.
+        # Text will be validated for format of email.
+
         id: signup_email
         hint_text: "Email"
         size_hint_x: 0.7
@@ -212,6 +233,10 @@ kv='''
         helper_text: "Enter text"
 
     MDTextField:
+
+        # This text field asks for setting password.
+        # The text entered in this field can be accessed by the name 'signup_password.text'.
+
         id: signup_password
         hint_text: "Set Password"
         size_hint_x: 0.7
@@ -223,12 +248,20 @@ kv='''
         helper_text: "Enter text"
 
     MDRoundFlatButton:
+        # Button positioned bottom of the screen.
+
         text: "Submit"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.12}
         size_hint_x: 0.7
+
+        # On clicking on this button, signupSubmit() function from main will be executed.
+        # Text entered in all text fields are passed as arguments.
+
         on_press: app.signupSubmit(root.ids.signup_name.text,root.ids.signup_age.text,root.ids.signup_gender.text,root.ids.signup_phn.text,root.ids.signup_email.text,root.ids.signup_password.text)
 
+
+    # Collecion of widgets to create a content navigation drawer.
     Widget:
         size_hint_y: None
         height: 10
@@ -237,57 +270,26 @@ kv='''
         ScreenManager:
 
             MDScreen:
-
+                # On clicking top left button, a screen comes out that can be called as Drawer.
                 MDToolbar:
                     title: "Signup "
                     elevation: 10
                     pos_hint: {"top": 1}
 
+                    # There will be a button on top left.
+                    # Clicking on it logs the user out and returns to login page.
                     left_action_items:
                         [['menu', lambda x: app.logout()]]
 
 
-        MDNavigationDrawer:
-            id: nav_drawer
-
-
-            ContentNavigationDrawer:
-                orientation: "vertical"
-                padding: "8dp"
-                spacing: "8dp"
-
-                AnchorLayout:
-                    anchor_x: "left"
-                    size_hint_y: None
-                    height:
-
-                MDLabel:
-                    text: "KivyMD library"
-                    font_style: "Button"
-                    size_hint_y: None
-
-
-                MDLabel:
-                    text: "kivydevelopment@gmail.com"
-                    font_style: "Caption"
-                    size_hint_y: None
-
-                ScrollView:
-
-                    DrawerList:
-                        id: md_list
-
-                        MDFlatButton:
-                            text: "LOG IN"
-                            font_size: 12
-                            pos_hint: {"center_x": 0.3, "center_y": 0.3}
-                            on_press: app.login()
-
 
 <PostLogin>:
+    # Dashbard screen or post login screen is the screen which is displayed after successful login.
+    # This screen displays three options for user to continue.
 
     MDLabel:
-
+        # Label displayed at top of the screen.
+        # Navigation for Plan New Trip button.
         text: "Planning for a Trip this week?"
         font_size: 18
         pos_hint: {"center_x": 0.5, "center_y": 0.75}
@@ -296,13 +298,20 @@ kv='''
         padding_y: 15
 
     MDRoundFlatButton:
+        # Placed below new trip label.
+
         text: "Plan new trip"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.65}
+
+        # On clicking on this button, newtrip() function from main will be executed.
+
         on_press: app.newtrip()
 
 
     MDLabel:
+        # Label displayed middle of the screen.
+        # Navigation for View Team button.
         text: "Already Registered?"
         font_size: 18
         pos_hint: {"center_x": 0.5, "center_y": 0.55}
@@ -311,12 +320,19 @@ kv='''
         padding_y: 15
 
     MDRoundFlatButton:
+        # Placed below Already registered? label.
+
         text: "Check your team status"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
+        # On clicking on this button, viewteam() function from main will be executed.
+
         on_press: app.viewteam()
 
     MDLabel:
+        # Label displayed bottom of the screen above a button.
+        # Navigation for Track Expenses button.
+
         text: "Trip Started?"
         font_size: 18
         pos_hint: {"center_x": 0.5, "center_y": 0.35}
@@ -325,9 +341,13 @@ kv='''
         padding_y: 15
 
     MDRoundFlatButton:
+        # Placed below bottom of the screen.
+
         text: "Track expenses"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        # On clicking on this button, track() function from main will be executed.
+
         on_press: app.track()
 
     Widget:
@@ -1228,6 +1248,8 @@ kv='''
                             font_size: 12
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
                             on_press: app.login()
+
+
 
 '''
 
