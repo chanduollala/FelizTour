@@ -1,8 +1,10 @@
+# SOURCE CODE FOR 'FELIZTOUR APP'
+# Created by CHANDRASHEKAR OLLALA
+
+
+
 # Kivy string that configures GUI.
 kv='''
-
-
-
 <HelloScreen>:
     # Hello Screen is the screen which is displayed on app startup.
 
@@ -350,6 +352,8 @@ kv='''
 
         on_press: app.track()
 
+    # Collecion of widgets to create a content navigation drawer.
+
     Widget:
         size_hint_y: None
         height: 10
@@ -358,12 +362,13 @@ kv='''
         ScreenManager:
 
             MDScreen:
-
+                # On clicking top left button, a screen comes out that can be called as Drawer.
                 MDToolbar:
                     title: "Hi "+ app.uname
                     elevation: 10
                     pos_hint: {"top": 1}
-
+                    # There will be a button on top left.
+                    # Clicking on this button opens the navigation drawer containing a button.
                     left_action_items:
                         [['menu', lambda x: nav_drawer.set_state("open")]]
 
@@ -371,7 +376,7 @@ kv='''
         MDNavigationDrawer:
             id: nav_drawer
 
-
+            # Content Navigation drawer appears when top left button is clicked.
             ContentNavigationDrawer:
                 orientation: "vertical"
                 padding: "8dp"
@@ -382,20 +387,20 @@ kv='''
                     size_hint_y: None
                     height:
 
-
                 ScrollView:
 
                     DrawerList:
                         id: md_list
 
                         MDRaisedButton:
+                            # Theere will be a LOGOUT button in navigation drawer.
+                            # Clicking on it logs the user out and returns to login page.
                             text: "LOG OUT"
                             font_size: 40
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
                             on_press: app.logout()
 <Trans>:
-    #boxlayout : box
-    #id: box
+    # This is a Box Layout.
     orientation: 'horizontal'
 
 
@@ -403,6 +408,8 @@ kv='''
 
 
 <TCard>:
+    # This is a user defined card widget. Used to create multiple cards of same layout.
+    # Each TCard added represents a transaction.
     id: tcard
     orientation: "vertical"
     size_hint: 1, None
@@ -410,14 +417,16 @@ kv='''
     focus_behavior: True
     ripple_behavior: True
     pos_hint: {"center_x": .5, "center_y": .5}
-
+    # Useually, a MDCard allows user to embed widgets into it.
+    # So, we are embedding a MDBoxLayout into MDCard.
+    # We will add all the labels into MD BoxLayout.
     MDBoxLayout:
         id: box_top
         spacing: "20dp"
         adaptive_height: True
 
 
-
+        # A nested MDBoxLayout
         MDBoxLayout:
             id: text_box
             orientation: "vertical"
@@ -426,6 +435,7 @@ kv='''
             padding: 0, "10dp", "10dp", "10dp"
 
             MDLabel:
+                # This Label displays the amount spent of the transaction.
                 text: app.money
                 theme_text_color: "Primary"
                 font_style: "H5"
@@ -433,6 +443,8 @@ kv='''
                 adaptive_height: True
 
             MDLabel:
+                # This Label displays the person name who paid for the transaction and payment time.
+
                 text: app.paidby+"    "+app.paymenttime
                 adaptive_height: True
                 theme_text_color: "Primary"
@@ -445,20 +457,34 @@ kv='''
         padding: "10dp", 0, 0, 0
 
         MDLabel:
+            # This Label displays the purpose of the transaction.
+
             text: app.purpose
             adaptive_height: True
             pos_hint: {"center_y": .5}
             theme_text_color: "Primary"
+
+
 <NewTrip>:
+
+    # NewTrip screen is the screen which is displayed when user selects plan new trip button in Dashboard screen.
+    # This screen displays three destinations for user to continue(can be upgraded in future versions).
+
+
     ScrollView:
+        # Three destination details along with images are embedded in a scrollView.
+        # Three destination details are aligned side by side.
+        # User can scroll horizontally to view the destination details and select them.
         do_scroll_x: True
         do_scroll_y: False
         size_hint: 0.95,0.87
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         GridLayout:
+            # Three destination details are aligned side by side.
             cols: 4
             size_hint_x: 3
             MDCard:
+                # This MDCard gives details of Goa Trip Destination and has a button to select.
                 size_hint: 0.97, 0.6
                 pos_hint: {"center_x": 0.5, "center_y": 0.45}
                 elevation: 30
@@ -466,14 +492,14 @@ kv='''
                 spacing: 25
                 orientation: 'vertical'
                 Image:
+                    # This image displays Goa and Has image in background.
                     source:'goa.png'
                     size_hint_y: .55
-
                     pos_hint:{"center_x": 0.5, "center_y": 0.5}
 
-
-
                 MDLabel:
+                    # This label diaplays title Goa.
+                    # This label is placed below Goa Image.
                     text: "Goa"
                     font_size: 40
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -481,6 +507,9 @@ kv='''
                     size_hint_y: .1
                     padding_y: 15
                 MDLabel:
+                    # This label displays detail about distance.
+                    # This label is placed below Goa Heading.
+
                     text: "India, 691 km from Hyderabad"
                     font_size: 20
                     halign: left
@@ -490,6 +519,9 @@ kv='''
                     padding_y: 15
 
                 MDLabel:
+                    # This label displays 'estimated cost'.
+                    # This label is placed below distance detail.
+
                     text: "Estimated cost:"
                     font_size: 15
                     halign: left
@@ -499,6 +531,9 @@ kv='''
                     padding_y: 15
 
                 MDLabel:
+                    # This label displays the estimated cost of Trip.
+                    # This label is placed at bottom above Go button.
+
                     text: "Rs.25000/person"
                     font_size: 28
                     halign: left
@@ -508,13 +543,19 @@ kv='''
                     padding_y: 15
 
                 MDRaisedButton:
+                    # This button is situated at the bottom of the screen in the Goa details section.
                     text: "Go"
                     font_size: 20
                     size_hint_y: .15
                     size_hint_x: .8
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    # On clicking on this button, go() function from main will be executed.
+                    # As this button is situated in Goa Destination details, 'Goa' is passed as argument.
+
                     on_press: app.go("Goa")
             MDCard:
+                # This MDCard gives details of Manali Trip Destination and has a button to select.
+
                 size_hint: 0.97, 0.6
                 pos_hint: {"center_x": 0.5, "center_y": 0.45}
                 elevation: 30
@@ -522,6 +563,8 @@ kv='''
                 spacing: 25
                 orientation: 'vertical'
                 Image:
+                    # This image displays Manali and has image in background.
+
                     source:'manali.png'
                     size_hint_y: .55
 
@@ -530,6 +573,8 @@ kv='''
 
 
                 MDLabel:
+                    # This label diaplays title Mnali.
+                    # This label is placed below Manali Image.
                     text: "Manali"
                     font_size: 40
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -537,6 +582,9 @@ kv='''
                     size_hint_y: .1
                     padding_y: 15
                 MDLabel:
+                    # This label displays detail about distance.
+                    # This label is placed below Manali Heading.
+
                     text: "India, 2126 km from Hyderabad"
                     font_size: 20
                     halign: left
@@ -546,6 +594,9 @@ kv='''
                     padding_y: 15
 
                 MDLabel:
+                    # This label displays 'estimated cost'.
+                    # This label is placed below distance detail.
+
                     text: "Estimated cost:"
                     font_size: 15
                     halign: left
@@ -555,6 +606,9 @@ kv='''
                     padding_y: 15
 
                 MDLabel:
+                    # This label displays the estimated cost of Trip.
+                    # This label is placed at bottom above Go button.
+
                     text: "Rs.35000/person"
                     font_size: 28
                     halign: left
@@ -564,14 +618,20 @@ kv='''
                     padding_y: 15
 
                 MDRaisedButton:
+                    # Button situated at bottom of the page in the Manali details section.
                     text: "Go"
                     font_size: 20
                     size_hint_y: .15
                     size_hint_x: .8
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    # On clicking on this button, go() function from main will be executed.
+                    # As this button is situated in Manali Destination details, 'Manali' is passed as argument.
+
                     on_press: app.go("Manali")
 
             MDCard:
+                # This MDCard gives details of Agra Trip Destination and has a button to select.
+
                 size_hint: 0.97, 0.6
                 pos_hint: {"center_x": 0.5, "center_y": 0.45}
                 elevation: 30
@@ -579,6 +639,8 @@ kv='''
                 spacing: 25
                 orientation: 'vertical'
                 Image:
+                    # This image displays Agra and has image in background.
+
                     source:'agra.png'
                     size_hint_y: .55
 
@@ -587,6 +649,9 @@ kv='''
 
 
                 MDLabel:
+                    # This label diaplays title Agra.
+                    # This label is placed below Agra Image.
+
                     text: "Agra"
                     font_size: 40
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -594,6 +659,9 @@ kv='''
                     size_hint_y: .1
                     padding_y: 15
                 MDLabel:
+                    # This label displays detail about distance.
+                    # This label is placed below Agra Heading.
+
                     text: "India, 1341 km from Hyderabad"
                     font_size: 20
                     halign: left
@@ -603,6 +671,9 @@ kv='''
                     padding_y: 15
 
                 MDLabel:
+                    # This label displays 'estimated cost'.
+                    # This label is placed below distance detail.
+
                     text: "Estimated cost:"
                     font_size: 15
                     halign: left
@@ -612,6 +683,9 @@ kv='''
                     padding_y: 15
 
                 MDLabel:
+                    # This label displays the estimated cost of Trip.
+                    # This label is placed at bottom above Go button.
+
                     text: "Rs.15000/person"
                     font_size: 28
                     halign: left
@@ -621,22 +695,31 @@ kv='''
                     padding_y: 15
 
                 MDRaisedButton:
+                    # Button situated bottom of screen in Agra details section.
                     text: "Go"
                     font_size: 20
                     size_hint_y: .15
                     size_hint_x: .8
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    # On clicking on this button, go() function from main will be executed.
+                    # As this button is situated in Agra Destination details, 'Agra' is passed as argument.
+
                     on_press: app.go("Agra")
+
+    # Collecion of widgets to create a content navigation drawer.
     MDNavigationLayout:
 
         ScreenManager:
 
             MDScreen:
+                # On clicking top left button, a screen comes out that can be called as Drawer.
 
                 MDToolbar:
                     title: "Plan new trip"
                     elevation: 10
                     pos_hint: {"top": 1}
+                    # There will be a button on top left.
+                    # Clicking on this button opens the navigation drawer containing a button.
 
                     left_action_items:
                         [['menu', lambda x: nav_drawer.set_state("open")]]
@@ -644,7 +727,7 @@ kv='''
 
         MDNavigationDrawer:
             id: nav_drawer
-
+            # Content Navigation drawer appears when top left button is clicked.
 
             ContentNavigationDrawer:
                 orientation: "vertical"
@@ -670,28 +753,43 @@ kv='''
                         id: md_list
 
                         MDFlatButton:
+                            # Theere will be a goback button in navigation drawer.
+
                             text: "Go to home page"
                             font_size: 25
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
+                            # Clicking on this button returns to user to dashboard.
+
                             on_press: app.goback()
 
 
 
 
 <TeamStatus>:
+    # TeamStatus screen is the screen which is displayed when user selects view team status button in Dashboard screen.
+    # This screen displays the team name assigned and co-teammates and their phonenumbers.
 
     MDRoundFlatButton:
+        # This button is situated at the bottom of the screen.
+
         text: "Go Back"
         font_size: 28
         size_hint_x: 0.9
         pos_hint: {"center_x": 0.5, "center_y": 0.1}
+        # Clicking on this button returns to user to dashboard.
+
         on_press: app.goback()
+
     MDLabel:
+        # This label displays name of team assigned to user.
         text: "Your Team: "+app.teamname
         font_size: 30
         pos_hint: {"center_x": 0.5, "center_y": 0.8}
         halign: 'center'
+
+
     MDCard:
+        # This card contains names of members of the team which is assigned to user.
         size_hint: 0.48, 0.32
         pos_hint: {"center_x": 0.27, "center_y": 0.55}
         elevation: 10
@@ -699,37 +797,46 @@ kv='''
         spacing: 25
         orientation: 'vertical'
         MDLabel:
+            # This label displays name of first member of the team.
+
             text: app.team[0][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+             # This label displays name of second member of the team.
             text: app.team[1][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays name of third member of the team.
             text: app.team[2][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays name of fourth member of the team.
             text: app.team[3][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
     MDCard:
+        # This card contains phone numbers of members of the team which is assigned to user.
         size_hint: 0.48, 0.32
         pos_hint: {"center_x": 0.73, "center_y": 0.55}
         elevation: 10
         padding: 25
         spacing: 25
         orientation: 'vertical'
+
         MDLabel:
+            # This label displays phone number of first member of the team.
             text: app.team[0][1]
             font_size: 15
             halign: left
@@ -737,28 +844,41 @@ kv='''
             halign: 'center'
 
         MDLabel:
+            # This label displays phone number of second member of the team.
+
             text: app.team[1][1]
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
         MDLabel:
+            # This label displays phone number of third member of the team.
+
             text: app.team[2][1]
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
         MDLabel:
+            # This label displays phone number of fourth member of the team.
+
             text: app.team[3][1]
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
     MDLabel:
+        # This label prints if the team is ready to go or not.
+        # This prints 'Hurray! Team is ready!' if team has 4 members.
+        # This prints 'Oops need to wait for others to join' if team has less than 4 members.
         text: app.ready
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.3}
         halign: 'center'
+
+    # Collecion of widgets to create a content navigation drawer.
     Widget:
         size_hint_y: None
         height: 10
@@ -773,6 +893,8 @@ kv='''
                     elevation: 10
                     pos_hint: {"top": 1}
 
+                    # Theere will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
                     left_action_items:
                         [['keyboard-backspace', lambda x: app.goback()]]
 
@@ -780,6 +902,7 @@ kv='''
         MDNavigationDrawer:
             id: nav_drawer
 
+            # Content Navigation drawer appears when top left button is clicked.
 
             ContentNavigationDrawer:
                 orientation: "vertical"
@@ -818,25 +941,37 @@ kv='''
 
 
 <Overview>:
+    # Overview screen is the screen which is displayed when user selects track expenses button in Dashboard screen.
+    # This screen displays the spending analysis of team.
+
     MDRaisedButton:
+        # This Button is placed on top right of the screen.
+        # This is like a tab in Transactions Section.
+
         text: "Overview"
         font_size: 18
         md_bg_color: 1, 0, 1, 1
         text_color: 0, 0, 1, 1
         pos_hint: {"center_x": 0.25, "center_y": 0.85}
         size_hint: 0.5,0.075
+        # This button refreshes overview screen when clicked in overview screen.
         on_press: app.overview()
         border: 'yellow'
 
     MDFlatButton:
+        # This Button is placed on top left of the screen.
+        # This is like a tab in Transactions Section.
+
         text: "Transactions"
         font_size: 18
         pos_hint: {"center_x": 0.75, "center_y": 0.85}
+        # On clicking this button, transactions() method from main will be executed.
         on_press: app.transactions()
         size_hint: 0.5,0.075
 
 
     MDCard:
+        # This card displays names of persons in team.
         size_hint: 0.48, 0.32
         pos_hint: {"center_x": 0.27, "center_y": 0.65}
         elevation: 10
@@ -844,37 +979,44 @@ kv='''
         spacing: 25
         orientation: 'vertical'
         MDLabel:
+            # This label displays name of first member of team.
             text: app.team[0][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays name of second member of team.
             text: app.team[1][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays name of third member of team.
             text: app.team[2][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays name of fourth member of team.
             text: app.team[3][0]
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
     MDCard:
+        # This card displays spends of each member in the team.
         size_hint: 0.48, 0.32
         pos_hint: {"center_x": 0.73, "center_y": 0.65}
         elevation: 10
         padding: 25
         spacing: 25
         orientation: 'vertical'
+
         MDLabel:
+            # This label displays money spent by first member of team.
             text: str(app.spends[app.team[0][0]])
             font_size: 15
             halign: left
@@ -882,18 +1024,21 @@ kv='''
             halign: 'center'
 
         MDLabel:
+            # This label displays money spent by second member of team.
             text: str(app.spends[app.team[1][0]])
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays money spent by third member of team.
             text: str(app.spends[app.team[2][0]])
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays money spent by fourth member of team.
             text: str(app.spends[app.team[3][0]])
             font_size: 15
             halign: left
@@ -901,6 +1046,8 @@ kv='''
             halign: 'center'
 
     MDCard:
+
+        # This card displays categories of spends.
         size_hint: 0.48, 0.4
         pos_hint: {"center_x": 0.27, "center_y": 0.25}
         elevation: 10
@@ -908,43 +1055,53 @@ kv='''
         spacing: 25
         orientation: 'vertical'
         MDLabel:
+            # This label displays 'Food'.
+
             text: 'Food'
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays 'Utilities'.
             text: "Utilities"
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays 'Travelling'.
             text: "Travelling"
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays 'Parties'.
             text: "Parties"
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
         MDLabel:
+            # This label displays 'Others'.
             text: "Others"
             font_size: 18
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
     MDCard:
+        # This card displays categories of spends.
         size_hint: 0.48, 0.4
         pos_hint: {"center_x": 0.73, "center_y": 0.25}
         elevation: 10
         padding: 25
         spacing: 25
         orientation: 'vertical'
+
         MDLabel:
+            # This label displays amount of money spent on Food.
             text: str(app.cwisespends["Food"])
             font_size: 15
             halign: left
@@ -952,24 +1109,35 @@ kv='''
             halign: 'center'
 
         MDLabel:
+            # This label displays amount of money spent on Utilities.
+
             text: str(app.cwisespends["Utilities"])
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
         MDLabel:
+            # This label displays amount of money spent on Travelling.
+
             text: str(app.cwisespends["Travelling"])
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
         MDLabel:
+            # This label displays amount of money spent on Parties.
+
             text: str(app.cwisespends["Parties"])
             font_size: 15
             halign: left
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             halign: 'center'
+
         MDLabel:
+            # This label displays amount of money spent on Other purposes.
+
             text: str(app.cwisespends["Others"])
             font_size: 18
             halign: left
@@ -977,17 +1145,23 @@ kv='''
             halign: 'center'
 
     MDFloatingActionButtonSpeedDial:
+        # This is a Floating Button.
+        # This is situated at bottom left of the screen.
+        # Clicking on this button navigates to Add Transaction screen.
+
         data: app.data
         rotation_root_button: True
         callback: app.plus
 
 
+    # Collecion of widgets to create a content navigation drawer.
     Widget:
         size_hint_y: None
         height: 10
     MDNavigationLayout:
 
         ScreenManager:
+            # On clicking top left button, a screen comes out that can be called as Drawer.
 
             MDScreen:
 
@@ -995,7 +1169,8 @@ kv='''
                     title: "Track Expenses"
                     elevation: 10
                     pos_hint: {"top": 1}
-
+                    # Theere will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
                     left_action_items:
                         [['keyboard-backspace', lambda x: app.goback()]]
 
@@ -1005,6 +1180,8 @@ kv='''
 
 
             ContentNavigationDrawer:
+                # Content Navigation drawer appears when top left button is clicked.
+
                 orientation: "vertical"
                 padding: "8dp"
                 spacing: "8dp"
@@ -1025,7 +1202,7 @@ kv='''
                     size_hint_y: None
 
                 ScrollView:
-
+                    # Contents of navigation drawer are placed in a scroll view.
                     DrawerList:
                         id: md_list
 
@@ -1033,26 +1210,39 @@ kv='''
                             text: "LOG IN"
                             font_size: 12
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
+
                             on_press: app.login()
 
 <Transactions>:
+    # Overview screen is the screen which is displayed when user clicks on Transactions button in Overview screen.
+    # This screen displays all the transactions done by team.
     MDRaisedButton:
+        # This Button is placed on top left of the screen.
+        # This is like a tab in Transactions Section.
         text: "Transactions"
         font_size: 18
         md_bg_color: 1, 0, 1, 1
         text_color: 0, 0, 1, 1
         pos_hint: {"center_x": 0.75, "center_y": 0.85}
         size_hint: 0.5,0.075
+        # This button refreshes transactions screen when clicked in transactions screen.
+
         on_press: app.transactions()
         border: 'yellow'
 
     MDFlatButton:
+        # This Button is placed on top right of the screen.
+        # This is like a tab in Transactions Section.
         text: "Overview"
         font_size: 18
         pos_hint: {"center_x": 0.25, "center_y": 0.85}
+        # On clicking this button, track() method from main will be executed.
         on_press: app.track()
         size_hint: 0.5,0.075
+
     ScrollView:
+        # The screen excluding Navigation Heading and Buttons is placed in Scroll view.
+        # This scroll view contains all the tcards, each representing one transaction.
         id: scroll
         do_scroll_x: False
         do_scroll_y: True
@@ -1060,15 +1250,21 @@ kv='''
         pos_hint: {"center_x": 0.5275, "y": 0}
 
         MDList:
-
+            # MDList is added with all the TCards in transactions method in main.
             id: box
             spacing: 20
 
 
     MDFloatingActionButtonSpeedDial:
+        # This is a Floating Button.
+        # This is situated at bottom left of the screen.
+        # Clicking on this button navigates to Add Transaction screen.
+
         data: app.data
         rotation_root_button: True
         callback: app.plus
+
+    # Collecion of widgets to create a content navigation drawer.
 
     Widget:
         size_hint_y: None
@@ -1076,14 +1272,15 @@ kv='''
     MDNavigationLayout:
 
         ScreenManager:
-
-            MDScreen:
+            # On clicking top left button, a screen comes out that can be called as Drawer.            MDScreen:
 
                 MDToolbar:
                     title: "Track Expenses"
                     elevation: 10
                     pos_hint: {"top": 1}
 
+                    # There will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
                     left_action_items:
                         [['keyboard-backspace', lambda x: app.goback()]]
 
@@ -1092,8 +1289,10 @@ kv='''
 
 
 <AddTransaction>
-
+    # AddTransaction screen is the screen which is displayed when user clicks on Floating add transaction button in Overview screen or Transactions screen.
+    # This screen allows user to enter details of transaction made and save it.
     MDCard:
+        # This card is displayed in the Background.
         size_hint: 0.95, 0.8
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         elevation: 10
@@ -1101,6 +1300,8 @@ kv='''
         spacing: 25
         orientation: 'vertical'
     MDTextField:
+        # This TextField takes user input for amount spent in the transaction.
+        # This text entered in this TextField can be accessed as 'amount.text'
         id: amount
         hint_text: "Amount"
         size_hint_x: 0.7
@@ -1113,6 +1314,8 @@ kv='''
 
 
     MDTextField:
+        # This TextField takes user input for purpose of the transaction.
+        # This text entered in this TextField can be accessed as 'purpose.text'
         id: purpose
         hint_text: "Purpose"
         size_hint_x: 0.7
@@ -1125,63 +1328,100 @@ kv='''
 
 
     MDLabel:
+        # This label displays 'select purpose'.
+        # This label is situated middle of the screen.
         id: category
         text: 'select purpose'
         font_size: 15
         halign: left
         pos_hint: {"center_x": 0.5, "center_y": 0.58}
         halign: 'center'
+
     MDLabel:
+        # This label displays 'Food'.
         text: "Food"
         font_size: 20
         pos_hint: {"center_x": 0.50, "center_y": 0.5}
         size_hint_x: 0.5
         halign: 'left'
+
     MDCheckbox:
+        # This check box is located next to Food Label.
+        # On checking this checkbox, on_checkbox_active() method from main is executed.
+        # 'Food' is passed as argument to the method.
+
         size_hint: None, None
         size: "48dp", "48dp"
         pos_hint: {'center_x': .8, 'center_y': .5}
         on_active: app.on_checkbox_active('Food')
+
     MDLabel:
+        # This label displays 'Utilities'.
         text: "Utilities"
         font_size: 20
         pos_hint: {"center_x": 0.50, "center_y": 0.42}
         size_hint_x: 0.5
         halign: 'left'
+
     MDCheckbox:
+        # This check box is located next to Utilities Label.
+        # On checking this checkbox, on_checkbox_active() method from main is executed.
+        # 'Utilities' is passed as argument to the method.
+
         size_hint: None, None
         size: "48dp", "48dp"
         pos_hint: {'center_x': .8, 'center_y': .42}
         on_active: app.on_checkbox_active('Utilities')
+
     MDLabel:
+        # This label displays 'Travelling'.
         text: "Tranvelling"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.35}
         size_hint_x: 0.5
         halign: 'left'
+
     MDCheckbox:
+        # This check box is located next to Travelling Label.
+        # On checking this checkbox, on_checkbox_active() method from main is executed.
+        # 'Travelling' is passed as argument to the method.
+
         size_hint: None, None
         size: "48dp", "48dp"
         pos_hint: {'center_x': .8, 'center_y': .35}
         on_active: app.on_checkbox_active('Travelling')
+
     MDLabel:
+        # This label displays 'Parties'.
         text: "Parties"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.27}
         size_hint_x: 0.5
         halign: 'left'
+
     MDCheckbox:
+        # This check box is located next to Parties Label.
+        # On checking this checkbox, on_checkbox_active() method from main is executed.
+        # 'Parties' is passed as argument to the method.
+
         size_hint: None, None
         size: "48dp", "48dp"
         pos_hint: {'center_x': .8, 'center_y': .27}
         on_active: app.on_checkbox_active('Parties')
+
     MDLabel:
+        # This label displays 'Others'.
         text: "Others"
         font_size: 20
         pos_hint: {"center_x": 0.5, "center_y": 0.20}
-        size_hint_x: 0.4
+        size_hint_x: 0.5
         halign: 'left'
+
     MDCheckbox:
+        # This check box is located next to Others Label.
+        # On checking this checkbox, on_checkbox_active() method from main is executed.
+        # 'Others' is passed as argument to the method.
+
         size_hint: None, None
         size: "48dp", "48dp"
         pos_hint: {'center_x': .8, 'center_y': .20}
@@ -1190,17 +1430,25 @@ kv='''
 
 
     MDRaisedButton:
+
+        # This button is situated at the bottom of the screen.
         text: "Add"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.12}
         size_hint_x: 0.7
+        # On clicking on this button, addSubmit() method from main is executed.
+        # Texts entered in amund and purpose textfields are passed as arguments.
         on_press: app.addSubmit(amount.text,purpose.text)
+
+    # Collecion of widgets to create a content navigation drawer.
+
     Widget:
         size_hint_y: None
         height: 10
     MDNavigationLayout:
 
         ScreenManager:
+            # On clicking top left button, a screen comes out that can be called as Drawer.            
 
             MDScreen:
 
@@ -1208,7 +1456,8 @@ kv='''
                     title: "Add Transaction"
                     elevation: 10
                     pos_hint: {"top": 1}
-
+                    # There will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
                     left_action_items:
                         [['keyboard-backspace', lambda x: app.goback()]]
 
@@ -1218,6 +1467,8 @@ kv='''
 
 
             ContentNavigationDrawer:
+            
+                # Content Navigation drawer appears when top left button is clicked.
                 orientation: "vertical"
                 padding: "8dp"
                 spacing: "8dp"
@@ -1239,17 +1490,16 @@ kv='''
                     size_hint_y: None
 
                 ScrollView:
-
+                    # Contents of navigation drawer are placed in a scroll view.
                     DrawerList:
                         id: md_list
-
+                        
                         MDFlatButton:
                             text: "LOG IN"
                             font_size: 12
                             pos_hint: {"center_x": 0.3, "center_y": 0.3}
+                            # On clicking this button, user is returned to login page.
                             on_press: app.login()
-
-
 
 '''
 
