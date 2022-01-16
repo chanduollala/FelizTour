@@ -1273,6 +1273,7 @@ kv='''
 
         ScreenManager:
             # On clicking top left button, a screen comes out that can be called as Drawer.            MDScreen:
+            MDScreen:
 
                 MDToolbar:
                     title: "Track Expenses"
@@ -1448,7 +1449,7 @@ kv='''
     MDNavigationLayout:
 
         ScreenManager:
-            # On clicking top left button, a screen comes out that can be called as Drawer.            
+            # On clicking top left button, a screen comes out that can be called as Drawer.
 
             MDScreen:
 
@@ -1467,7 +1468,7 @@ kv='''
 
 
             ContentNavigationDrawer:
-            
+
                 # Content Navigation drawer appears when top left button is clicked.
                 orientation: "vertical"
                 padding: "8dp"
@@ -1493,7 +1494,7 @@ kv='''
                     # Contents of navigation drawer are placed in a scroll view.
                     DrawerList:
                         id: md_list
-                        
+
                         MDFlatButton:
                             text: "LOG IN"
                             font_size: 12
