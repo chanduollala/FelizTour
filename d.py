@@ -4,6 +4,19 @@
 
 
 # Kivy string that configures GUI.
+import json
+import webbrowser
+
+from kivy.core.text import LabelBase
+from kivy.uix.image import Image
+from kivymd.font_definitions import theme_font_styles
+from kivymd.uix.button import MDFlatButton, MDRaisedButton
+from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.imagelist import SmartTile
+from kivymd.uix.tab import MDTabsBase
+
 kv='''
 <HelloScreen>:
     # Hello Screen is the screen which is displayed on app startup.
@@ -1286,6 +1299,75 @@ kv='''
                         [['keyboard-backspace', lambda x: app.goback()]]
 
 
+<Weather>:
+    MDLabel:
+        text: "The weather details at "+app.destination+" is: "
+        font_size: 30
+        pos_hint: {"center_x": 0.5, "center_y": 0.90}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Current Temperature:'+str(app.current_temperature)
+        font_size: 25
+        pos_hint: {"center_x": 0.5, "center_y": 0.80}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Humidity:'+str(app.humidity)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.70}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Minimum Temperature:'+str(app.tempmin)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.65}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Maximum Temperature:'+str(app.tempmax)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.60}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+
+    MDLabel:
+        text: "The location details of "+app.destination+" is :"
+        font_size: 30
+        pos_hint: {"center_x": 0.5, "center_y": 0.50}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+
+    MDLabel:
+        text: 'Latitude:'+str(app.latitude)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.40}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Longitude:'+str(app.longitude)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.35}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+
+    MDRoundFlatButton:
+        text: "Go to Home Page"
+        font_size: 20
+        pos_hint: {"center_x": 0.5, "center_y": 0.15}
+        on_press: app.goback()
+
+
+
+
 
 
 
@@ -1532,7 +1614,9 @@ from kivymd.uix.snackbar import Snackbar
 from kivy.properties import ObjectProperty
 # datetime module is used to get current time and date.
 from datetime import datetime
+from kivy.metrics import dp
 
+from matplotlib import pyplot as plt
 
 #Configuring Google Drive API and Google Spreadsheets API.
 import gspread
@@ -1592,14 +1676,14 @@ headers = {
 # Regular Expressions are used in app to verify the pattern of email and phone number input.
 import re
 
+Window.size = (530,620)
 
 # Builder loads GUI configuration string saved as kv.
-Builder.load_string(kv)
+Builder.load_file("file.kv")
 
 # Screen Manager is used to switch between different screens.
 sm = ScreenManager()
 
-# Window.size = (300,550)
 
 
 # Screens and Widgets mentioned as classes.
@@ -1624,6 +1708,17 @@ class Signup(MDScreen):
 
 class NewTrip(MDScreen):
     pass
+class Weather(MDScreen):
+    pass
+
+class OpenMaps(MDRaisedButton):
+    pass
+
+class DismissButton(MDFlatButton):
+    pass
+
+class DismissButtonB(MDRaisedButton):
+    pass
 
 class AddTransaction(MDScreen):
     pass
@@ -1644,6 +1739,8 @@ class Trans(MDBoxLayout):
 class TCard(MDCard):
     pass
 
+class Tab1(MDFloatLayout,MDTabsBase):
+    pass
 # Global variables.
 userdetails=[]
 currentscreen='helloscreen'
@@ -1664,6 +1761,18 @@ class MainApp(MDApp):
     # main method of GUI.
     def build(self):
 
+        LabelBase.register(
+            name="Dongle",
+            fn_regular="Dongle-Regular.ttf")
+
+        theme_font_styles.append('Dongle')
+        self.theme_cls.font_styles["Dongle"] = [
+            "Dongle",
+            16,
+            False,
+            0.15,
+        ]
+
         # Setting display theme for GUI.
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Red"
@@ -1677,9 +1786,62 @@ class MainApp(MDApp):
 
         return sm
 
+    def on_tab_switch(
+            self, instance_tabs, instance_tab, instance_tab_label, tab_text
+    ):
+        pass
+
+    def weather(self,destination):
+        api_request = requests.get("https://api.openweathermap.org/data/2.5/weather?q="
+                                   + destination + "&units=metric&appid=" + 'bb9c06a29f2282c6d4b8606cc12d874c')
+
+        api = json.loads(api_request.content)
+
+        # Temperatures
+        y = api['main']
+        self.current_temperature = y['temp']
+        self.humidity = y['humidity']
+        self.tempmin = y['temp_min']
+        self.tempmax = y['temp_max']
+
+        # Coordinates
+        x = api['coord']
+        self.longitude = x['lon']
+        self.latitude = x['lat']
+
+        # Country
+        z = api['sys']
+        self.country = z['country']
+        self.citi = api['name']
+        '''search = f"weather in {self.destination}"
+        url=f"https://www.google.com/search?&q={search}"
+        url2=f"https://in.search.yahoo.com/search?p=weather%20in%20hyderabad"
+        r=requests.get(url)
+        s=BeautifulSoup(r.text,"html.parser")
+        update=s.find("div",class_="BNeawe").text
+        self.temp=update
+
+        '''
+        sm.add_widget(Weather(name='weather'))
+        sm.current = 'weather'
+
     # Method to validate Login credentials entered by verifying.
 
     # Userdetails global variable is updated only if Username is found and Entered Password matches with correct password.
+    def navigate(self):
+        self.dialog = MDDialog(
+            text="This takes you to Google Maps. Do you wish to continue?",
+            buttons=[
+                DismissButton(),
+                OpenMaps(),
+            ],
+        )
+        self.dialog.open()
+
+    def gotomap(self):
+        webbrowser.open("https://www.google.com/maps/dir/Your+location/"+self.destination+"/")
+
+
 
     def validateuser(self,username,password):
 
@@ -1845,6 +2007,13 @@ class MainApp(MDApp):
         sm.add_widget(LoginPage(name='loginpage'))
         sm.current = 'loginpage'
 
+        self.dialog = MDDialog(
+            text="App Information\n===============\nThis Application is developed by CHANDRASHEKAR OLLALA and SAHAJA REDDY P.\nSubmitted to Vasavi College of Engineering as part of MiniProject-1 -III Semester. \nThis app repository is available at:\nhttps://github.com/chanduollala/FelizTour",
+            buttons=[
+                DismissButtonB(),
+            ],
+        )
+        self.dialog.open()
 
     def clear(self):
         self.welcome_label.text = "WELCOME"
@@ -1974,9 +2143,15 @@ class MainApp(MDApp):
                 self.teamname = teamdes[0].upper() + str(teamno)
                 print(self.teamname)
                 print(self.team)
+                self.destination=teamdes
 
     # Method that is executed when new trip button is clicked.
     def newtrip(self):
+        try:
+            sm.remove_widget(sm.get_screen('newtrip'))
+        except kivy.uix.screenmanager.ScreenManagerException:
+            pass
+
         # Add screen.
         # Set current screen to added screen.
         # Remove previous screen.
@@ -1987,12 +2162,13 @@ class MainApp(MDApp):
 
     # Method executed when signup button from login oage is clicked.
     def signup(self):
-        Snackbar(
-            text="Enter your details",
-            snackbar_x="10dp",
-            snackbar_y="10dp",
-            size_hint_x=.95
-        ).open()
+        self.dialog = MDDialog(
+            text="Enter your Details and click Submit",
+            buttons=[
+                DismissButtonB(),
+            ],
+        )
+        self.dialog.open()
 
         # Add signup screen.
         # Set current screen to signup screen.
@@ -2108,6 +2284,137 @@ class MainApp(MDApp):
                 sm.remove_widget(sm.get_screen('transactions'))
             except kivy.uix.screenmanager.ScreenManagerException:
                 pass
+
+            self.namewisespend = MDDataTable(
+                use_pagination=False,
+                check=True,
+                column_data=[
+                    ("No.", dp(30)),
+                    ("Name", dp(30)),
+                    ("Money Spent", dp(60)),
+
+                ],
+                row_data=[
+                    (
+                        "1",
+                        ("goa.png",
+                        [39 / 256, 174 / 256, 96 / 256, 1],
+                         self.team[0][0]
+                         ),
+                        self.spends[self.team[0][0]],
+                    ),
+                    (
+                        "2",
+                        self.team[1][0],
+                        self.spends[self.team[1][0]],
+                    ),
+                    (
+                        "3",
+                        self.team[2][0],
+                        self.spends[self.team[2][0]],
+                    ),
+                    (
+                        "4",
+                        self.team[3][0],
+                        self.spends[self.team[3][0]],
+                    ),
+
+                ],
+                sorted_on="Money Spent",
+                sorted_order="ASC",
+                elevation=2,
+            )
+            sm.get_screen('overview').ids.overviewtab.add_widget(self.namewisespend)
+
+            #name wise spends bargraph
+            # creating the dataset
+            data = {self.team[0][0]: self.spends[self.team[0][0]], self.team[1][0]: self.spends[self.team[1][0]],
+                    self.team[2][0]: self.spends[self.team[2][0]],self.team[3][0]: self.spends[self.team[3][0]] }
+            courses = list(data.keys())
+            values = list(data.values())
+
+            fig = plt.figure(figsize=(5, 3.5))
+
+            self.catwisespend = MDDataTable(
+                use_pagination=False,
+                check=True,
+                column_data=[
+                    ("No.",dp(30)),
+                    ("Category", dp(30)),
+                    ("Money Spent", dp(60)),
+
+                ],
+                row_data=[
+                    (
+                        "1",
+                        ("food",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
+                         "Food"
+                         ),
+                        self.cwisespends["Food"],
+                    ),
+                    (
+                        "2",
+                        ("bag-personal",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
+                         "Utilities"
+                         ),
+                        self.cwisespends["Utilities"],
+                    ),
+                    (
+                        "3",
+                        ("airplane",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
+                         "Travelling"
+                         ),
+                        self.cwisespends["Travelling"],
+                    ),
+                    (
+                        "4",
+                        ("party-popper",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
+                         "Parties"
+                         ),
+                        self.cwisespends["Parties"],
+                    ),(
+                        "5",
+                        ("map-marker-question",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
+                         "Others"
+                         ),
+                        self.cwisespends["Others"],
+                    ),
+
+                ],
+                elevation=2,
+            )
+            sm.get_screen('overview').ids.catwisetab.add_widget(self.catwisespend)
+            # creating the bar plot
+            plt.bar(courses, values, color='maroon',
+                    width=0.4)
+            plt.ylabel("Amount")
+
+            plt.savefig("namewise.png")
+
+            tile1=Image(source=r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png",size_hint_y=0.45)
+            sm.get_screen('overview').ids.overviewtab.add_widget(tile1)
+
+            # Creating dataset
+            categories = ["Food", 'Utilities', 'Travelling',
+                    'Parties', 'Others']
+
+            data = [self.cwisespends[x] for x in categories]
+
+            # Creating plot
+            fig = plt.figure(figsize=(5, 3.5))
+            plt.pie(data, labels=categories)
+            plt.savefig("catwise.png")
+
+            tile2 = Image(source=r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png", size_hint_y=0.35)
+            sm.get_screen('overview').ids.catwisetab.add_widget(tile2)
+
+
+
         else:
 
             # User is not enrolled for a trip. so no team is allocated.

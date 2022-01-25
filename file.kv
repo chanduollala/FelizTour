@@ -10,6 +10,11 @@
         size_hint_x: 1
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
+    OneLineListItem:
+        text: "Single-line item"
+        on_release: app.continue_to_app()
+        size_hint_x: 0.3
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
     MDRaisedButton:
         # Button floating above background image.
@@ -33,10 +38,12 @@
 
         size_hint: 0.8, 0.75
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
-        elevation: 10
+        elevation: 5
         padding: 25
         spacing: 25
         orientation: 'vertical'
+        radius: [20,20,20,20]
+        md_bg_color: get_color_from_hex("#f4dedc")
 
     MDLabel:
         # This label prints 'Welcome' on top of screen.
@@ -54,6 +61,7 @@
         # Positioned below welcome label.
 
         id: user
+        mode: "rectangle"
         hint_text: "Username"
         icon_right: "account"
         size_hint_x: 0.6
@@ -66,6 +74,7 @@
         # Positioned below Username text field.
 
         id: password
+        mode: "rectangle"
         hint_text: "Password"
         icon_right: "eye-off"
         size_hint_x: 0.6
@@ -74,13 +83,17 @@
         pos_hint: {"center_x": 0.5, "center_y": 0.55}
         password: True
 
-    MDRoundFlatButton:
+    MDFillRoundFlatIconButton:
         # Button positioned below username and password text fields.
 
-        text: "Login"
+        text: "             Login"
+        border: 20,20,20,20
         font_size: 25
-        pos_hint: {"center_x": 0.5, "center_y": 0.45}
+        halign: 'center'
+        pos_hint: {"center_x": 0.5, "center_y": 0.40}
         size_hint_x: 0.6
+        elevation:25
+        icon: "login-variant"
 
         # On clicking on this button, login() function from main will be executed.
         # Text entered in Username and Password text fields are passed as arguments.
@@ -97,16 +110,18 @@
         padding_y: 15
 
 
-    MDRoundFlatButton:
+    MDFillRoundFlatIconButton:
         # Button positioned below at bottom of the screen.
 
-        text: "Signup"
+        text: "             Signup"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.2}
 
         # On clicking on this button, login() function from main will be executed.
         on_press: app.signup()
         size_hint_x: 0.6
+        elevation:25
+        icon: "account-plus"
 
     # Collecion of widgets to create a content navigation drawer.
     Widget:
@@ -140,12 +155,14 @@
     MDCard:
         # This blank Card is displayed in the background.
 
-        size_hint: 0.95, 0.8
+        size_hint: 0.87, 0.8
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
-        elevation: 10
+        elevation: 5
         padding: 25
         spacing: 25
         orientation: 'vertical'
+        radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
 
     MDTextField:
 
@@ -155,6 +172,7 @@
 
         id: signup_name
         hint_text: "Name"
+        icon_right: "account-box"
         size_hint_x: 0.7
         required: True
         helper_text_mode: "on_error"
@@ -176,6 +194,7 @@
         font_size: 25
         pos_hint: {"center_x": 0.50, "center_y": 0.65}
         max_text_length: 2
+        icon_right: "baby-carriage"
         input_type: 'number'
         required: True
         helper_text_mode: "on_error"
@@ -193,6 +212,7 @@
         font_size: 25
         pos_hint: {"center_x": 0.50, "center_y": 0.55}
         required: True
+        icon_right: "gender-male-female"
         helper_text_mode: "on_error"
         helper_text: "M/F"
 
@@ -209,6 +229,7 @@
         width: 180
         font_size: 25
         pos_hint: {"center_x": 0.50, "center_y": 0.45}
+        icon_right: "cellphone-android"
         helper_text_mode: "on_error"
         helper_text: "Enter 10-digit phone number"
 
@@ -223,6 +244,7 @@
         size_hint_x: 0.7
         width: 180
         font_size: 25
+        icon_right: "email"
         pos_hint: {"center_x": 0.50, "center_y": 0.35}
         required: True
         helper_text_mode: "on_error"
@@ -237,19 +259,21 @@
         hint_text: "Set Password"
         size_hint_x: 0.7
         width: 180
+        icon_right: "form-textbox-password"
         font_size: 25
         pos_hint: {"center_x": 0.50, "center_y": 0.25}
         required: True
         helper_text_mode: "on_error"
         helper_text: "Enter text"
 
-    MDRoundFlatButton:
+    MDFillRoundFlatIconButton:
         # Button positioned bottom of the screen.
 
-        text: "Submit"
+        text: "                   Submit"
         font_size: 25
         pos_hint: {"center_x": 0.5, "center_y": 0.12}
         size_hint_x: 0.7
+        icon: 'check-box-outline'
 
         # On clicking on this button, signupSubmit() function from main will be executed.
         # Text entered in all text fields are passed as arguments.
@@ -275,20 +299,29 @@
                     # There will be a button on top left.
                     # Clicking on it logs the user out and returns to login page.
                     left_action_items:
-                        [['menu', lambda x: app.logout()]]
+                        [['keyboard-backspace', lambda x: app.logout()]]
 
 
 
 <PostLogin>:
     # Dashbard screen or post login screen is the screen which is displayed after successful login.
     # This screen displays three options for user to continue.
+    MDCard:
+        size_hint_x:0.85
+        size_hint_y:0.19
+        pos_hint: {"center_x": 0.5, "center_y": 0.76}
+        elevation: 30
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        radius: [20,20,20,20]
 
     MDLabel:
         # Label displayed at top of the screen.
         # Navigation for Plan New Trip button.
         text: "Planning for a Trip this week?"
         font_size: 18
-        pos_hint: {"center_x": 0.5, "center_y": 0.75}
+        pos_hint: {"center_x": 0.5, "center_y": 0.82}
         halign: 'center'
         size_hint_y: None
         padding_y: 15
@@ -298,19 +331,28 @@
 
         text: "Plan new trip"
         font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.65}
+        pos_hint: {"center_x": 0.5, "center_y": 0.72}
 
         # On clicking on this button, newtrip() function from main will be executed.
 
         on_press: app.newtrip()
 
+    MDCard:
+        size_hint_y:0.19
+        size_hint_x:0.85
+        pos_hint: {"center_x": 0.5, "center_y": 0.56}
+        elevation: 30
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        radius: [20,20,20,20]
 
     MDLabel:
         # Label displayed middle of the screen.
         # Navigation for View Team button.
         text: "Already Registered?"
         font_size: 18
-        pos_hint: {"center_x": 0.5, "center_y": 0.55}
+        pos_hint: {"center_x": 0.5, "center_y": 0.62}
         halign: 'center'
         size_hint_y: None
         padding_y: 15
@@ -320,18 +362,29 @@
 
         text: "Check your team status"
         font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.45}
+        pos_hint: {"center_x": 0.5, "center_y": 0.52}
         # On clicking on this button, viewteam() function from main will be executed.
 
         on_press: app.viewteam()
+
+
+    MDCard:
+        size_hint_y:0.38
+        size_hint_x:0.85
+        pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        elevation: 30
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        radius: [20,20,20,20]
 
     MDLabel:
         # Label displayed bottom of the screen above a button.
         # Navigation for Track Expenses button.
 
-        text: "Trip Started?"
+        text: "Team Ready??"
         font_size: 18
-        pos_hint: {"center_x": 0.5, "center_y": 0.35}
+        pos_hint: {"center_x": 0.5, "center_y": 0.42}
         halign: 'center'
         size_hint_y: None
         padding_y: 15
@@ -341,10 +394,30 @@
 
         text: "Track expenses"
         font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        pos_hint: {"center_x": 0.5, "center_y": 0.32}
         # On clicking on this button, track() function from main will be executed.
 
         on_press: app.track()
+
+    MDRoundFlatButton:
+        # Placed below bottom of the screen.
+
+        text: "Know weather condition at your Destination"
+        font_size: 20
+        pos_hint: {"center_x": 0.5, "center_y": 0.22}
+        # On clicking on this button, track() function from main will be executed.
+
+        on_press: app.weather(app.destination)
+
+    MDRoundFlatButton:
+        # Placed below bottom of the screen.
+
+        text: "Navigate to destination"
+        font_size: 20
+        pos_hint: {"center_x": 0.5, "center_y": 0.12}
+        # On clicking on this button, track() function from main will be executed.
+
+        on_press: app.navigate()
 
     # Collecion of widgets to create a content navigation drawer.
 
@@ -398,8 +471,17 @@
     orientation: 'horizontal'
 
 
+<OpenMaps>:
+    text: 'OPEN MAPS'
 
+    on_release: app.gotomap()
 
+<DismissButton>:
+    text: 'DISMISS'
+    on_release: app.dialog.dismiss(force=True)
+<DismissButtonB>:
+    text: 'DISMISS'
+    on_release: app.dialog.dismiss(force=True)
 
 <TCard>:
     # This is a user defined card widget. Used to create multiple cards of same layout.
@@ -757,6 +839,137 @@
                             on_press: app.goback()
 
 
+<Weather>:
+
+    MDLabel:
+        text: "The weather details at "+app.destination+" is: "
+        font_size: 30
+        pos_hint: {"center_x": 0.5, "center_y": 0.80}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Current Temperature:'+str(app.current_temperature)
+        font_size: 25
+        pos_hint: {"center_x": 0.5, "center_y": 0.70}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Humidity:'+str(app.humidity)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.60}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Minimum Temperature:'+str(app.tempmin)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.55}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Maximum Temperature:'+str(app.tempmax)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.50}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+
+    MDLabel:
+        text: "The location details of "+app.destination+" is :"
+        font_size: 30
+        pos_hint: {"center_x": 0.5, "center_y": 0.40}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+
+    MDLabel:
+        text: 'Latitude:'+str(app.latitude)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.30}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+    MDLabel:
+        text: 'Longitude:'+str(app.longitude)
+        font_size: 18
+        pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        halign: 'center'
+        size_hint_y: None
+        padding_y: 15
+
+    MDRoundFlatButton:
+        text: "Go to Home Page"
+        font_size: 20
+        pos_hint: {"center_x": 0.5, "center_y": 0.15}
+        on_press: app.goback()
+
+
+    # Collecion of widgets to create a content navigation drawer.
+    Widget:
+        size_hint_y: None
+        height: 10
+    MDNavigationLayout:
+
+        ScreenManager:
+
+            MDScreen:
+
+                MDToolbar:
+                    title: "Weather Status"
+                    elevation: 10
+                    pos_hint: {"top": 1}
+
+                    # Theere will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
+                    left_action_items:
+                        [['keyboard-backspace', lambda x: app.goback()]]
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+
+            # Content Navigation drawer appears when top left button is clicked.
+
+            ContentNavigationDrawer:
+                orientation: "vertical"
+                padding: "8dp"
+                spacing: "8dp"
+
+                AnchorLayout:
+                    anchor_x: "left"
+                    size_hint_y: None
+                    height:
+
+                MDLabel:
+                    text: "KivyMD library"
+                    font_style: "Button"
+                    size_hint_y: None
+
+
+                MDLabel:
+                    text: "kivydevelopment@gmail.com"
+                    font_style: "Caption"
+                    size_hint_y: None
+
+
+                ScrollView:
+
+                    DrawerList:
+                        id: md_list
+
+                        MDFlatButton:
+                            text: "LOG IN"
+                            font_size: 12
+                            pos_hint: {"center_x": 0.3, "center_y": 0.3}
+                            on_press: app.login()
+
+
+
+
+
 
 
 <TeamStatus>:
@@ -937,215 +1150,36 @@
 <Overview>:
     # Overview screen is the screen which is displayed when user selects track expenses button in Dashboard screen.
     # This screen displays the spending analysis of team.
+    MDTabs:
+        size_hint_y: 0.90
 
-    MDRaisedButton:
-        # This Button is placed on top right of the screen.
-        # This is like a tab in Transactions Section.
+        id: tabs
+        on_tab_switch: app.on_tab_switch(*args)
+        Tab1:
+            id: overviewtab
+            icon: "chart-bar"
+            title: "Persons"
 
-        text: "Overview"
-        font_size: 18
-        md_bg_color: 1, 0, 1, 1
-        text_color: 0, 0, 1, 1
-        pos_hint: {"center_x": 0.25, "center_y": 0.85}
-        size_hint: 0.5,0.075
-        # This button refreshes overview screen when clicked in overview screen.
-        on_press: app.overview()
-        border: 'yellow'
+        Tab1:
+            id: catwisetab
+            icon: "chart-pie"
+            title: "Categories"
 
-    MDFlatButton:
-        # This Button is placed on top left of the screen.
-        # This is like a tab in Transactions Section.
-
-        text: "Transactions"
-        font_size: 18
-        pos_hint: {"center_x": 0.75, "center_y": 0.85}
-        # On clicking this button, transactions() method from main will be executed.
-        on_press: app.transactions()
-        size_hint: 0.5,0.075
+        Tab1:
+            id: transactionstab
+            icon: "view-list"
+            title: "Transactions"
 
 
-    MDCard:
-        # This card displays names of persons in team.
-        size_hint: 0.48, 0.32
-        pos_hint: {"center_x": 0.27, "center_y": 0.65}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
-        MDLabel:
-            # This label displays name of first member of team.
-            text: app.team[0][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays name of second member of team.
-            text: app.team[1][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays name of third member of team.
-            text: app.team[2][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays name of fourth member of team.
-            text: app.team[3][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-    MDCard:
-        # This card displays spends of each member in the team.
-        size_hint: 0.48, 0.32
-        pos_hint: {"center_x": 0.73, "center_y": 0.65}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
-
-        MDLabel:
-            # This label displays money spent by first member of team.
-            text: str(app.spends[app.team[0][0]])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-        MDLabel:
-            # This label displays money spent by second member of team.
-            text: str(app.spends[app.team[1][0]])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays money spent by third member of team.
-            text: str(app.spends[app.team[2][0]])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays money spent by fourth member of team.
-            text: str(app.spends[app.team[3][0]])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-    MDCard:
-
-        # This card displays categories of spends.
-        size_hint: 0.48, 0.4
-        pos_hint: {"center_x": 0.27, "center_y": 0.25}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
-        MDLabel:
-            # This label displays 'Food'.
-
-            text: 'Food'
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays 'Utilities'.
-            text: "Utilities"
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays 'Travelling'.
-            text: "Travelling"
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays 'Parties'.
-            text: "Parties"
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays 'Others'.
-            text: "Others"
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-    MDCard:
-        # This card displays categories of spends.
-        size_hint: 0.48, 0.4
-        pos_hint: {"center_x": 0.73, "center_y": 0.25}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
-
-        MDLabel:
-            # This label displays amount of money spent on Food.
-            text: str(app.cwisespends["Food"])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-        MDLabel:
-            # This label displays amount of money spent on Utilities.
-
-            text: str(app.cwisespends["Utilities"])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-        MDLabel:
-            # This label displays amount of money spent on Travelling.
-
-            text: str(app.cwisespends["Travelling"])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-        MDLabel:
-            # This label displays amount of money spent on Parties.
-
-            text: str(app.cwisespends["Parties"])
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-        MDLabel:
-            # This label displays amount of money spent on Other purposes.
-
-            text: str(app.cwisespends["Others"])
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-    MDFloatingActionButtonSpeedDial:
+    MDFloatingActionButton:
         # This is a Floating Button.
         # This is situated at bottom left of the screen.
         # Clicking on this button navigates to Add Transaction screen.
 
-        data: app.data
+        icon: "plus-box-multiple"
         rotation_root_button: True
-        callback: app.plus
+        pos_hint: {"center_x": 0.9, "center_y": 0.07}
+        on_release: app.addtrs
 
 
     # Collecion of widgets to create a content navigation drawer.
