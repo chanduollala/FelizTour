@@ -15,6 +15,7 @@ from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.imagelist import SmartTile
+from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.tab import MDTabsBase
 
 kv='''
@@ -1609,13 +1610,13 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivy.uix.behaviors import ButtonBehavior
-from kivymd.uix.list import MDList
+from kivymd.uix.list import MDList, IRightBodyTouch
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import ObjectProperty
 # datetime module is used to get current time and date.
 from datetime import datetime
 from kivy.metrics import dp
-
+import os
 from matplotlib import pyplot as plt
 
 #Configuring Google Drive API and Google Spreadsheets API.
@@ -1741,6 +1742,10 @@ class TCard(MDCard):
 
 class Tab1(MDFloatLayout,MDTabsBase):
     pass
+
+class RightCheckBox(IRightBodyTouch, MDCheckbox):
+    pass
+
 # Global variables.
 userdetails=[]
 currentscreen='helloscreen'
@@ -2075,16 +2080,22 @@ class MainApp(MDApp):
             l=TCard()
             sm.get_screen('transactions').ids.box.add_widget(l)
 
-    # Method to select category when clicked against its checkbox (Add Transaction screen).
-    def on_checkbox_active(self,category):
-        self.category=category
+
 
     # Method that executes when Add Transaction button is clicked.
-    def plus(self, addtrs):
+    def plus(self):
         # Creating new Screen and setting it to current.
         sm.add_widget(AddTransaction(name='addtransaction'))
         sm.current = 'addtransaction'
 
+        if os.path.exists(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png"):
+            os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png")
+        else:
+            print("The file does not exist")
+        if os.path.exists(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png"):
+            os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png")
+        else:
+            print("The file does not exist")
     # Method that is executed when login button is clicked.
     # Username and Passsword entered are read and passsed as arguments.
     def login(self,username,password):
@@ -2098,6 +2109,7 @@ class MainApp(MDApp):
             self.phonenumber=self.userdetails["Phone"]
             self.loggedinusername=self.userdetails["Usename"]
             self.gender=self.userdetails["Gender"]
+            self.uicon="alpha-"+self.uname[0].lower()+"circle"
 
             # Adding dashboard screen(Postlogin page)
             sm.add_widget(PostLogin(name='postlogin'))
@@ -2199,12 +2211,13 @@ class MainApp(MDApp):
             newrow=["001",name,age,gender,phone,email,username,password]
             usheet.insert_row(newrow,2)
 
-            Snackbar(
-                text="Account created successfully. Login to continue",
-                snackbar_x="10dp",
-                snackbar_y="10dp",
-                size_hint_x=.95
-            ).open()
+            self.dialog = MDDialog(
+                text="Account created successfully. Your username is sent through SMS. Please check your phone.",
+                buttons=[
+                    DismissButtonB(),
+                ],
+            )
+            self.dialog.open()
 
             # Returning to login page after creating account successfully.
             sm.add_widget(LoginPage(name='loginpage'))
@@ -2425,6 +2438,31 @@ class MainApp(MDApp):
                 size_hint_x=.95
             ).open()
 
+    def select(self,cat):
+        '''sm.get_screen("overview").ids.Food.active=False
+        sm.get_screen("overview").ids.Utilities.active = False
+        sm.get_screen("overview").ids.Travelling.active = False
+        sm.get_screen("overview").ids.Parties.active = False
+        sm.get_screen("overview").ids.Others.active = False'''
+        if cat=="Food":
+            #sm.get_screen("overview").ids.Food.active = True
+            self.category="Food"
+        elif cat=="Utilities":
+            #sm.get_screen("overview").ids.Utilities.active = True
+            self.category = "Utilities"
+        elif cat=="Travelling":
+            #sm.get_screen("overview").ids.Travelling.active = True
+            self.category = "Travelling"
+        elif cat=="Parties":
+            #sm.get_screen("overview").ids.Parties.active = True
+            self.category = "Parties"
+        elif cat=="Others":
+            #sm.get_screen("overview").ids.Others.active = True
+            self.category = "Others"
+
+
+
+
     # Method that runs when user clicks on view teams button.
     # This gets the assigned team details and displays.
     def viewteam(self):
@@ -2496,6 +2534,15 @@ class MainApp(MDApp):
 
         # Removes previous screen.
         sm.remove_widget(sm.get_screen(x))
+
+        if os.path.exists(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png"):
+            os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png")
+        else:
+            print("The file does not exist")
+        if os.path.exists(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png"):
+            os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png")
+        else:
+            print("The file does not exist")
 
     # Method to get count of requests to each destination.
     # Used in backend.
@@ -2581,6 +2628,15 @@ class MainApp(MDApp):
             snackbar_y="10dp",
             size_hint_x=.95
         ).open()
+
+        if os.path.exists(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png"):
+            os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png")
+        else:
+            print("The file does not exist")
+        if os.path.exists(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png"):
+            os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png")
+        else:
+            print("The file does not exist")
 
         # Remove Overview and Transaction screens as they are outdated.
         try:

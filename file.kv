@@ -1179,7 +1179,7 @@
         icon: "plus-box-multiple"
         rotation_root_button: True
         pos_hint: {"center_x": 0.9, "center_y": 0.07}
-        on_release: app.addtrs
+        on_release: app.plus()
 
 
     # Collecion of widgets to create a content navigation drawer.
@@ -1322,16 +1322,20 @@
     # This screen allows user to enter details of transaction made and save it.
     MDCard:
         # This card is displayed in the Background.
-        size_hint: 0.95, 0.8
+        size_hint: 0.95, 0.82
         pos_hint: {"center_x": 0.5, "center_y": 0.45}
         elevation: 10
         padding: 25
         spacing: 25
         orientation: 'vertical'
+        radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
+
     MDTextField:
         # This TextField takes user input for amount spent in the transaction.
         # This text entered in this TextField can be accessed as 'amount.text'
         id: amount
+        mode: "rectangle"
         hint_text: "Amount"
         size_hint_x: 0.7
         required: True
@@ -1339,7 +1343,7 @@
         helper_text: "Enter Amount"
         width: 180
         font_size: 25
-        pos_hint: {"center_x": 0.50, "center_y": 0.75}
+        pos_hint: {"center_x": 0.50, "center_y": 0.78}
 
 
     MDTextField:
@@ -1348,114 +1352,52 @@
         id: purpose
         hint_text: "Purpose"
         size_hint_x: 0.7
+        mode: "rectangle"
         width: 180
         font_size: 25
-        pos_hint: {"center_x": 0.50, "center_y": 0.65}
+        pos_hint: {"center_x": 0.50, "center_y": 0.67}
         required: True
         helper_text_mode: "on_error"
         helper_text: "Enter purpose"
 
 
-    MDLabel:
-        # This label displays 'select purpose'.
-        # This label is situated middle of the screen.
-        id: category
-        text: 'select purpose'
-        font_size: 15
-        halign: left
-        pos_hint: {"center_x": 0.5, "center_y": 0.58}
-        halign: 'center'
+    MDList:
+        pos_hint: {"center_x": 0.50, "center_y": 0.385}
+        size_hint_x: 0.7
+        OneLineAvatarIconListItem:
+            id: Food
+            text: "Food"
+            icon: "food"
+            RightCheckBox:
+                on_active: app.select("Food")
 
-    MDLabel:
-        # This label displays 'Food'.
-        text: "Food"
-        font_size: 20
-        pos_hint: {"center_x": 0.50, "center_y": 0.5}
-        size_hint_x: 0.5
-        halign: 'left'
+        OneLineAvatarIconListItem:
+            id: Utilities
+            text: "Utilities"
+            icon: "bag-personal"
+            RightCheckBox:
+                on_active: app.select("Utilities")
 
-    MDCheckbox:
-        # This check box is located next to Food Label.
-        # On checking this checkbox, on_checkbox_active() method from main is executed.
-        # 'Food' is passed as argument to the method.
+        OneLineAvatarIconListItem:
+            id: Travelling
+            text: "Travelling"
+            icon: "airplane"
+            RightCheckBox:
+                on_active: app.select("Travelling")
 
-        size_hint: None, None
-        size: "48dp", "48dp"
-        pos_hint: {'center_x': .8, 'center_y': .5}
-        on_active: app.on_checkbox_active('Food')
+        OneLineAvatarIconListItem:
+            id: Parties
+            text: "Parties"
+            icon: "party-popper"
+            RightCheckBox:
+                on_active: app.select("Parties")
 
-    MDLabel:
-        # This label displays 'Utilities'.
-        text: "Utilities"
-        font_size: 20
-        pos_hint: {"center_x": 0.50, "center_y": 0.42}
-        size_hint_x: 0.5
-        halign: 'left'
-
-    MDCheckbox:
-        # This check box is located next to Utilities Label.
-        # On checking this checkbox, on_checkbox_active() method from main is executed.
-        # 'Utilities' is passed as argument to the method.
-
-        size_hint: None, None
-        size: "48dp", "48dp"
-        pos_hint: {'center_x': .8, 'center_y': .42}
-        on_active: app.on_checkbox_active('Utilities')
-
-    MDLabel:
-        # This label displays 'Travelling'.
-        text: "Tranvelling"
-        font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.35}
-        size_hint_x: 0.5
-        halign: 'left'
-
-    MDCheckbox:
-        # This check box is located next to Travelling Label.
-        # On checking this checkbox, on_checkbox_active() method from main is executed.
-        # 'Travelling' is passed as argument to the method.
-
-        size_hint: None, None
-        size: "48dp", "48dp"
-        pos_hint: {'center_x': .8, 'center_y': .35}
-        on_active: app.on_checkbox_active('Travelling')
-
-    MDLabel:
-        # This label displays 'Parties'.
-        text: "Parties"
-        font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.27}
-        size_hint_x: 0.5
-        halign: 'left'
-
-    MDCheckbox:
-        # This check box is located next to Parties Label.
-        # On checking this checkbox, on_checkbox_active() method from main is executed.
-        # 'Parties' is passed as argument to the method.
-
-        size_hint: None, None
-        size: "48dp", "48dp"
-        pos_hint: {'center_x': .8, 'center_y': .27}
-        on_active: app.on_checkbox_active('Parties')
-
-    MDLabel:
-        # This label displays 'Others'.
-        text: "Others"
-        font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.20}
-        size_hint_x: 0.5
-        halign: 'left'
-
-    MDCheckbox:
-        # This check box is located next to Others Label.
-        # On checking this checkbox, on_checkbox_active() method from main is executed.
-        # 'Others' is passed as argument to the method.
-
-        size_hint: None, None
-        size: "48dp", "48dp"
-        pos_hint: {'center_x': .8, 'center_y': .20}
-        on_active: app.on_checkbox_active('Others')
-
+        OneLineAvatarIconListItem:
+            id: Others
+            text: "Others"
+            icon: "map-marker-question"
+            RightCheckBox:
+                on_active: app.select("Others")
 
 
     MDRaisedButton:
@@ -1463,7 +1405,7 @@
         # This button is situated at the bottom of the screen.
         text: "Add"
         font_size: 25
-        pos_hint: {"center_x": 0.5, "center_y": 0.12}
+        pos_hint: {"center_x": 0.5, "center_y": 0.10}
         size_hint_x: 0.7
         # On clicking on this button, addSubmit() method from main is executed.
         # Texts entered in amund and purpose textfields are passed as arguments.
