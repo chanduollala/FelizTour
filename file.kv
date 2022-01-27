@@ -76,7 +76,7 @@
         id: password
         mode: "rectangle"
         hint_text: "Password"
-        icon_right: "eye-off"
+        icon_right: "form-textbox-password"
         size_hint_x: 0.6
         width: 200
         font_size: 18
@@ -315,6 +315,7 @@
         spacing: 25
         orientation: 'vertical'
         radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
 
     MDLabel:
         # Label displayed at top of the screen.
@@ -346,6 +347,7 @@
         spacing: 25
         orientation: 'vertical'
         radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
 
     MDLabel:
         # Label displayed middle of the screen.
@@ -369,14 +371,15 @@
 
 
     MDCard:
-        size_hint_y:0.38
+        size_hint_y:0.39
         size_hint_x:0.85
-        pos_hint: {"center_x": 0.5, "center_y": 0.25}
+        pos_hint: {"center_x": 0.5, "center_y": 0.26}
         elevation: 30
         padding: 25
         spacing: 25
         orientation: 'vertical'
         radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
 
     MDLabel:
         # Label displayed bottom of the screen above a button.
@@ -476,6 +479,10 @@
 
     on_release: app.gotomap()
 
+<OpenWhatsapp>:
+    text: 'OPEN WHATSAPP'
+    on_release: app.gotowhatsapp()
+
 <DismissButton>:
     text: 'DISMISS'
     on_release: app.dialog.dismiss(force=True)
@@ -488,11 +495,13 @@
     # Each TCard added represents a transaction.
     id: tcard
     orientation: "vertical"
-    size_hint: 1, None
+    size_hint: 0.7, None
     height: box_top.height + box_bottom.height
     focus_behavior: True
     ripple_behavior: True
     pos_hint: {"center_x": .5, "center_y": .5}
+    radius: [15,15,15,15]
+    md_bg_color: get_color_from_hex("#f4dedc")
     # Useually, a MDCard allows user to embed widgets into it.
     # So, we are embedding a MDBoxLayout into MDCard.
     # We will add all the labels into MD BoxLayout.
@@ -500,6 +509,7 @@
         id: box_top
         spacing: "20dp"
         adaptive_height: True
+
 
 
         # A nested MDBoxLayout
@@ -512,7 +522,7 @@
 
             MDLabel:
                 # This Label displays the amount spent of the transaction.
-                text: app.money
+                text: "                "+app.money
                 theme_text_color: "Primary"
                 font_style: "H5"
                 bold: True
@@ -521,7 +531,7 @@
             MDLabel:
                 # This Label displays the person name who paid for the transaction and payment time.
 
-                text: app.paidby+"    "+app.paymenttime
+                text: "        "+app.paidby+"             "+app.paymenttime
                 adaptive_height: True
                 theme_text_color: "Primary"
 
@@ -535,7 +545,7 @@
         MDLabel:
             # This Label displays the purpose of the transaction.
 
-            text: app.purpose
+            text: "    "+app.purpose
             adaptive_height: True
             pos_hint: {"center_y": .5}
             theme_text_color: "Primary"
@@ -976,114 +986,146 @@
     # TeamStatus screen is the screen which is displayed when user selects view team status button in Dashboard screen.
     # This screen displays the team name assigned and co-teammates and their phonenumbers.
 
-    MDRoundFlatButton:
-        # This button is situated at the bottom of the screen.
 
-        text: "Go Back"
-        font_size: 28
-        size_hint_x: 0.9
-        pos_hint: {"center_x": 0.5, "center_y": 0.1}
-        # Clicking on this button returns to user to dashboard.
 
-        on_press: app.goback()
 
-    MDLabel:
+
+
+    MDCard:
+        # This card is displayed in the Background.
+        size_hint: 0.85, 0.82
+        pos_hint: {"center_x": 0.5, "center_y": 0.45}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
+
+    MDFillRoundFlatIconButton:
+
         # This label displays name of team assigned to user.
-        text: "Your Team: "+app.teamname
+        text: "   Your Team: "+app.teamname
+        icon: "airplane"
+        icon_size: "100sp"
         font_size: 30
-        pos_hint: {"center_x": 0.5, "center_y": 0.8}
+        size_hint_x: 0.6
+        pos_hint: {"center_x": 0.5, "center_y": 0.77}
         halign: 'center'
 
-
-    MDCard:
-        # This card contains names of members of the team which is assigned to user.
-        size_hint: 0.48, 0.32
-        pos_hint: {"center_x": 0.27, "center_y": 0.55}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
-        MDLabel:
-            # This label displays name of first member of the team.
-
+    MDList:
+        pos_hint: {"center_x": 0.50, "center_y": 0.5}
+        size_hint_x: 0.7
+        OneLineAvatarIconListItem:
+            id: teammember1
             text: app.team[0][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-             # This label displays name of second member of the team.
+            on_size:
+                self.ids._right_container.width = container.width
+                self.ids._right_container.x = container.width
+
+            IconLeftWidget:
+                icon: "alpha-"+app.team[0][0][0].lower()+"-circle"
+                icon_size: "110sp"
+
+            YourContainer:
+                id: container
+
+                MDRaisedButton:
+                    text: "Details"
+                    on_release: app.viewmemberdetails(app.team[0][0])
+
+                MDIconButton:
+                    icon: "whatsapp"
+                    icon_size: "110sp"
+                    on_release: app.chatwhatsapp(app.team[0][1])
+
+        OneLineAvatarIconListItem:
+            id: teammember2
             text: app.team[1][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays name of third member of the team.
+            on_size:
+                self.ids._right_container.width = container.width
+                self.ids._right_container.x = container.width
+
+            IconLeftWidget:
+                icon: "alpha-"+app.team[1][0][0].lower()+"-circle"
+                icon_size: "64sp"
+
+            YourContainer:
+
+
+                MDRaisedButton:
+                    text: "Details"
+                    on_release: app.viewmemberdetails(app.team[1][0])
+
+                MDIconButton:
+                    icon: "whatsapp"
+                    icon_size: "64sp"
+                    on_release: app.chatwhatsapp(app.team[1][1])
+
+        OneLineAvatarIconListItem:
+            id: teammember3
             text: app.team[2][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-        MDLabel:
-            # This label displays name of fourth member of the team.
+            on_size:
+                self.ids._right_container.width = container.width
+                self.ids._right_container.x = container.width
+
+            IconLeftWidget:
+                icon: "alpha-"+app.team[2][0][0].lower()+"-circle"
+                icon_size: "64sp"
+
+            YourContainer:
+
+
+                MDRaisedButton:
+                    text: "Details"
+                    on_release: app.viewmemberdetails(app.team[2][0])
+
+                MDIconButton:
+                    icon: "whatsapp"
+                    icon_size: "64sp"
+                    on_release: app.chatwhatsapp(app.team[2][1])
+        OneLineAvatarIconListItem:
+            id: teammember4
             text: app.team[3][0]
-            font_size: 18
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
+            on_size:
+                self.ids._right_container.width = container.width
+                self.ids._right_container.x = container.width
 
-    MDCard:
-        # This card contains phone numbers of members of the team which is assigned to user.
-        size_hint: 0.48, 0.32
-        pos_hint: {"center_x": 0.73, "center_y": 0.55}
-        elevation: 10
-        padding: 25
-        spacing: 25
-        orientation: 'vertical'
+            IconLeftWidget:
+                icon: "alpha-"+app.team[3][0][0].lower()+"-circle"
+                icon_size: "64sp"
 
-        MDLabel:
-            # This label displays phone number of first member of the team.
-            text: app.team[0][1]
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
+            YourContainer:
 
-        MDLabel:
-            # This label displays phone number of second member of the team.
 
-            text: app.team[1][1]
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
+                MDRaisedButton:
+                    text: "Details"
+                    on_release: app.viewmemberdetails(app.team[3][0])
 
-        MDLabel:
-            # This label displays phone number of third member of the team.
+                MDIconButton:
+                    icon: "whatsapp"
+                    icon_size: "64sp"
+                    on_release: app.chatwhatsapp(app.team[3][1])
 
-            text: app.team[2][1]
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
-
-        MDLabel:
-            # This label displays phone number of fourth member of the team.
-
-            text: app.team[3][1]
-            font_size: 15
-            halign: left
-            pos_hint: {"center_x": 0.5, "center_y": 0.5}
-            halign: 'center'
     MDLabel:
         # This label prints if the team is ready to go or not.
         # This prints 'Hurray! Team is ready!' if team has 4 members.
         # This prints 'Oops need to wait for others to join' if team has less than 4 members.
         text: app.ready
+
         font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.3}
+        #font_style: "bold"
+        size_hint_x: 0.6
+        pos_hint: {"center_x": 0.5, "center_y": 0.23}
         halign: 'center'
+
+    MDIcon:
+        icon: app.readyicon
+        icon_size: "100sp"
+        size_hint_x: 0.1
+        size_hint_y:0.1
+        pos_hint: {"center_x": 0.5, "center_y": 0.12}
+
 
     # Collecion of widgets to create a content navigation drawer.
     Widget:
@@ -1169,7 +1211,17 @@
             id: transactionstab
             icon: "view-list"
             title: "Transactions"
+            ScrollView:
+                # The screen excluding Navigation Heading and Buttons is placed in Scroll view.
+                # This scroll view contains all the tcards, each representing one transaction.
+                id: scrolltrans
+                do_scroll_x: False
+                do_scroll_y: True
 
+                MDList:
+                    # MDList is added with all the TCards in transactions method in main.
+                    id: transbox
+                    spacing: 20
 
     MDFloatingActionButton:
         # This is a Floating Button.
@@ -1367,35 +1419,40 @@
         OneLineAvatarIconListItem:
             id: Food
             text: "Food"
-            icon: "food"
+            IconLeftWidget:
+                icon: "food"
             RightCheckBox:
                 on_active: app.select("Food")
 
         OneLineAvatarIconListItem:
             id: Utilities
             text: "Utilities"
-            icon: "bag-personal"
+            IconLeftWidget:
+                icon: "bag-personal"
             RightCheckBox:
                 on_active: app.select("Utilities")
 
         OneLineAvatarIconListItem:
             id: Travelling
             text: "Travelling"
-            icon: "airplane"
+            IconLeftWidget:
+                icon: "airplane"
             RightCheckBox:
                 on_active: app.select("Travelling")
 
         OneLineAvatarIconListItem:
             id: Parties
             text: "Parties"
-            icon: "party-popper"
+            IconLeftWidget:
+                icon: "party-popper"
             RightCheckBox:
                 on_active: app.select("Parties")
 
         OneLineAvatarIconListItem:
             id: Others
             text: "Others"
-            icon: "map-marker-question"
+            IconLeftWidget:
+                icon: "map-marker-question"
             RightCheckBox:
                 on_active: app.select("Others")
 
@@ -1472,3 +1529,295 @@
                             # On clicking this button, user is returned to login page.
                             on_press: app.login()
 
+
+
+<Destinations>:
+    ScrollView:
+        id: destsview
+        size_hint: 0.85,0.9
+        pos_hint: {"center_x": 0.5}
+
+
+        MDList:
+            id: container
+            size_hint_x: 0.78
+
+            OneLineAvatarIconListItem:
+                text: "Agra"
+                text_size: 35
+
+
+                IconLeftWidget:
+                    id: agra
+                    icon: "C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\agra icon.png"
+                    pos_hint: { "center_y": 0.5}
+                    icon_size: "110sp"
+
+                YourContainer:
+                    id: container
+
+                    MDRaisedButton:
+                        text: "KNOW MORE"
+                        pos_hint: { "center_y": 0.5}
+                        color: "blue"
+                        on_release: app.viewdestination("Agra",agra.icon)
+
+            OneLineAvatarIconListItem:
+
+                text: "Goa"
+                text_size: 25
+
+
+                IconLeftWidget:
+                    id: goa
+                    icon: "C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\Goa icon.png"
+                    pos_hint: { "center_y": 0.5}
+                    icon_size: "110sp"
+
+                YourContainer:
+                    id: container
+
+                    MDRaisedButton:
+                        text: "KNOW MORE"
+                        pos_hint: { "center_y": 0.5}
+                        color: "blue"
+                        on_release: app.viewdestination("Goa",goa.icon)
+
+            OneLineAvatarIconListItem:
+
+                text: "Manali"
+                text_size: 25
+
+
+                IconLeftWidget:
+                    id: manali
+                    icon: "C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\manali icon.png"
+                    pos_hint: { "center_y": 0.5}
+                    icon_size: "110sp"
+
+                YourContainer:
+                    id: container
+
+                    MDRaisedButton:
+                        text: "KNOWMORE"
+                        pos_hint: { "center_y": 0.5}
+                        color: "blue"
+                        on_release: app.viewdestination("Manali",manali.icon)
+
+
+    Widget:
+        size_hint_y: None
+        height: 10
+    MDNavigationLayout:
+
+        ScreenManager:
+            # On clicking top left button, a screen comes out that can be called as Drawer.
+
+            MDScreen:
+
+                MDToolbar:
+                    title: "Browse Destinations"
+                    elevation: 10
+                    pos_hint: {"top": 1}
+                    # There will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
+                    left_action_items:
+                        [['keyboard-backspace', lambda x: app.goback()]]
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+
+
+            ContentNavigationDrawer:
+
+                # Content Navigation drawer appears when top left button is clicked.
+                orientation: "vertical"
+                padding: "8dp"
+                spacing: "8dp"
+
+                AnchorLayout:
+                    anchor_x: "left"
+                    size_hint_y: None
+                    height:
+
+                MDLabel:
+                    text: "KivyMD library"
+                    font_style: "Button"
+                    size_hint_y: None
+
+
+                MDLabel:
+                    text: "kivydevelopment@gmail.com"
+                    font_style: "Caption"
+                    size_hint_y: None
+
+                ScrollView:
+                    # Contents of navigation drawer are placed in a scroll view.
+                    DrawerList:
+                        id: md_list
+
+                        MDFlatButton:
+                            text: "LOG IN"
+                            font_size: 12
+                            pos_hint: {"center_x": 0.3, "center_y": 0.3}
+                            # On clicking this button, user is returned to login page.
+                            on_press: app.login()
+
+<MySwiperItem>:
+
+    FitImage:
+        source: app.image
+        radius: [20,]
+
+
+<PlaceDetails>:
+
+
+    MDCard:
+        # This card is displayed in the Background.
+        size_hint: 0.85, 0.82
+        pos_hint: {"center_x": 0.5, "center_y": 0.45}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        radius: [20,20,20,20]
+        md_bg_color:get_color_from_hex("#f4dedc")
+
+    MDSwiper:
+        id: swiperimages
+        size_hint_y: 0.4
+        pos_hint: {"center_x": 0.5, "center_y": 0.4}
+
+
+
+    MDLabel:
+
+        # This label displays name of team assigned to user.
+        text: app.desplace
+        font_size: 30
+        size_hint_x: 0.6
+        pos_hint: {"center_x": 0.5, "center_y": 0.79}
+        halign: 'center'
+
+    MDFloatingActionButton:
+        id: location
+        pos_hint: {"center_x": 0.2, "center_y": 0.69}
+        icon: 'google-maps'
+        icon_color: 'white'
+        md_bg_color: app.theme_cls.primary_color
+        on_release: app.taptarget('location')
+
+    MDFloatingActionButton:
+        id: distance
+        pos_hint: {"center_x": 0.4, "center_y": 0.69}
+        icon: 'map-marker-distance'
+        icon_color: 'white'
+        md_bg_color: app.theme_cls.primary_color
+        on_release: app.taptarget('distance')
+
+    MDFloatingActionButton:
+        id: weather
+        pos_hint: {"center_x": 0.8, "center_y": 0.69}
+        icon: 'weather-partly-lightning'
+        icon_color: 'white'
+        md_bg_color: app.theme_cls.primary_color
+        on_release: app.taptarget('weather')
+
+    MDFloatingActionButton:
+        id: time
+        pos_hint: {"center_x": 0.6, "center_y": 0.69}
+        icon: 'clock-time-five'
+        icon_color: 'white'
+        md_bg_color: app.theme_cls.primary_color
+        on_release: app.taptarget('time')
+
+
+
+
+
+
+    MDFillRoundFlatIconButton:
+        # Button positioned bottom of the screen.
+
+        text: "             Select Destination"
+        font_size: 25
+        pos_hint: {"center_x": 0.5, "center_y": 0.12}
+        size_hint_x: 0.7
+        icon: 'check-box-outline'
+
+        # On clicking on this button, signupSubmit() function from main will be executed.
+        # Text entered in all text fields are passed as arguments.
+
+        on_press: app.go(app.desplace)
+
+
+
+
+
+
+
+
+
+
+
+
+    Widget:
+        size_hint_y: None
+        height: 10
+    MDNavigationLayout:
+
+        ScreenManager:
+            # On clicking top left button, a screen comes out that can be called as Drawer.
+
+            MDScreen:
+
+                MDToolbar:
+                    title: "Browse Destinations"
+                    elevation: 10
+                    pos_hint: {"top": 1}
+                    # There will be a goback button on top left.
+                    # On clicking this button, user is returned to dashboard.
+                    left_action_items:
+                        [['keyboard-backspace', lambda x: app.goback()]]
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+
+
+            ContentNavigationDrawer:
+
+                # Content Navigation drawer appears when top left button is clicked.
+                orientation: "vertical"
+                padding: "8dp"
+                spacing: "8dp"
+
+                AnchorLayout:
+                    anchor_x: "left"
+                    size_hint_y: None
+                    height:
+
+                MDLabel:
+                    text: "KivyMD library"
+                    font_style: "Button"
+                    size_hint_y: None
+
+
+                MDLabel:
+                    text: "kivydevelopment@gmail.com"
+                    font_style: "Caption"
+                    size_hint_y: None
+
+                ScrollView:
+                    # Contents of navigation drawer are placed in a scroll view.
+                    DrawerList:
+                        id: md_list
+
+                        MDFlatButton:
+                            text: "LOG IN"
+                            font_size: 12
+                            pos_hint: {"center_x": 0.3, "center_y": 0.3}
+                            # On clicking this button, user is returned to login page.
+                            on_press: app.login()

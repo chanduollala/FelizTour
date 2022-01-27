@@ -16,7 +16,10 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.imagelist import SmartTile
 from kivymd.uix.selectioncontrol import MDCheckbox
+from kivymd.uix.swiper import MDSwiperItem
 from kivymd.uix.tab import MDTabsBase
+from kivymd.uix.taptargetview import MDTapTargetView
+from kivymd.utils.fitimage import FitImage
 
 kv='''
 <HelloScreen>:
@@ -1618,6 +1621,7 @@ from datetime import datetime
 from kivy.metrics import dp
 import os
 from matplotlib import pyplot as plt
+from geopy.geocoders import Nominatim
 
 #Configuring Google Drive API and Google Spreadsheets API.
 import gspread
@@ -1704,15 +1708,29 @@ class Transactions(MDScreen):
 class PostLogin(MDScreen):
     pass
 
+
+class MySwiperItem(MDSwiperItem):
+    pass
+
 class Signup(MDScreen):
     pass
 
 class NewTrip(MDScreen):
     pass
+
+class Destinations(MDScreen):
+    pass
+
+class PlaceDetails(MDScreen):
+    pass
+
 class Weather(MDScreen):
     pass
 
 class OpenMaps(MDRaisedButton):
+    pass
+
+class OpenWhatsapp(MDRaisedButton):
     pass
 
 class DismissButton(MDFlatButton):
@@ -1746,6 +1764,9 @@ class Tab1(MDFloatLayout,MDTabsBase):
 class RightCheckBox(IRightBodyTouch, MDCheckbox):
     pass
 
+class YourContainer(IRightBodyTouch, MDBoxLayout):
+    adaptive_width = True
+
 # Global variables.
 userdetails=[]
 currentscreen='helloscreen'
@@ -1764,6 +1785,8 @@ class MainApp(MDApp):
     displayname="User"
 
     # main method of GUI.
+
+
     def build(self):
 
         LabelBase.register(
@@ -1785,6 +1808,11 @@ class MainApp(MDApp):
         # Adding screens (HelloScreen and New Trip)
         sm.add_widget(HelloScreen(name='helloscreen'))
         sm.add_widget(NewTrip(name='newtrip'))
+
+        self.tap_target_view=MDTapTargetView(widget=sm,
+                    title_text="Location ",
+                    description_text="This is a description\n of the button",
+                    widget_position="left_bottom",)
 
         # Current screen set to HelloScreen.(on app start).
         sm.current = 'helloscreen'
@@ -1845,6 +1873,128 @@ class MainApp(MDApp):
 
     def gotomap(self):
         webbrowser.open("https://www.google.com/maps/dir/Your+location/"+self.destination+"/")
+
+
+    def calculate(self):
+
+
+        # calling the Nominatim tool
+        loc = Nominatim(user_agent="GetLoc")
+
+        # entering the location name
+        getLoc = loc.geocode("Gosainganj Lucknow")
+
+        # printing address
+        location=str(getLoc.address)+"\n"+"Latitude = "+str(getLoc.latitude)+"\nLongitude = "+str(getLoc.longitude)
+
+        api_request = requests.get("https://api.openweathermap.org/data/2.5/weather?q="
+                                   + self.desplace + "&units=metric&appid=" + 'bb9c06a29f2282c6d4b8606cc12d874c')
+
+        api = json.loads(api_request.content)
+
+        # Temperatures
+        y = api['main']
+
+        weather=f"Current Temperature:\t{y['temp']}\nHumidity:\t{y['humidity']}\nMinimum Temperature:  {y['temp_min']}\nMaximum Temperature:  {y['temp_max']}"
+
+        import googlemaps
+        try:
+            # Requires API key
+            gmaps = googlemaps.Client(key='AIzaSyAYOoO_A2xUECEXmkeI7kLEqYAPNz8JF84')
+
+            # Requires cities name
+            my_dist = gmaps.distance_matrix('Peddapalli', self.desplace)['rows'][0]['elements'][0]
+
+            # Printing the result
+            distance=my_dist['distance']['text']
+            duration=my_dist['duration']['text']
+        except googlemaps.exceptions.ApiError:
+            distance="1984 km"
+            duration="38 hours"
+
+
+
+        return location,weather,distance,duration
+
+    def generatetaptarget(self, requested):
+
+        location,weather,distance,duration=self.calculate()
+
+        if requested=="location" and self.tap_target_view.state=="close":
+
+            self.tap_target_view = MDTapTargetView(
+                widget=sm.get_screen("placedetails").ids.location,
+                title_text="Location details of "+self.desplace,
+                description_text=location,
+                widget_position="left_top",
+            )
+
+        if requested=="weather" and self.tap_target_view.state=="close":
+
+            self.tap_target_view = MDTapTargetView(
+                widget=sm.get_screen("placedetails").ids.weather,
+                title_text="Weather condition at "+self.desplace,
+                description_text=weather,
+                widget_position="right_top",
+            )
+
+        if requested=="distance" and self.tap_target_view.state=="close":
+
+            self.tap_target_view = MDTapTargetView(
+                widget=sm.get_screen("placedetails").ids.distance,
+                title_text="Distance from your location to "+self.desplace,
+                description_text=distance,
+
+                widget_position="top",
+            )
+
+        if requested=="time" and self.tap_target_view.state=="close":
+
+            self.tap_target_view = MDTapTargetView(
+                widget=sm.get_screen("placedetails").ids.time,
+                title_text="Journey Duration from your \ncurrent location to "+self.desplace,
+                description_text=duration,
+                widget_position="top",
+            )
+
+    def taptarget(self,requested):
+
+        if self.tap_target_view.state == "close":
+            self.generatetaptarget(requested)
+            self.tap_target_view.start()
+        else:
+            self.tap_target_view.stop()
+
+    def viewdestination(self,place,icon):
+
+        self.desplace=place
+        self.desicon=icon
+
+        images={"Goa":[fr"C:\Users\chand\Documents\GitHub\FelizTour\images\goa{x}.png" for x in range(1,6)],"Agra":[fr"C:\Users\chand\Documents\GitHub\FelizTour\images\agra{x}.png" for x in range(1,5)],"Manali":[fr"C:\Users\chand\Documents\GitHub\FelizTour\images\manali{x}.png" for x in range(1,5)]}
+
+        try:
+            sm.remove_widget(sm.get_screen('placedetails'))
+        except kivy.uix.screenmanager.ScreenManagerException:
+            pass
+
+        sm.add_widget(PlaceDetails(name="placedetails"))
+        sm.current="placedetails"
+
+
+
+        for image in images[place]:
+
+            self.image=image
+            p= MySwiperItem()
+
+
+            sm.get_screen("placedetails").ids.swiperimages.add_widget(p)
+
+
+
+
+
+
 
 
 
@@ -2096,6 +2246,9 @@ class MainApp(MDApp):
             os.remove(r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\namewise.png")
         else:
             print("The file does not exist")
+
+
+
     # Method that is executed when login button is clicked.
     # Username and Passsword entered are read and passsed as arguments.
     def login(self,username,password):
@@ -2111,6 +2264,13 @@ class MainApp(MDApp):
             self.gender=self.userdetails["Gender"]
             self.uicon="alpha-"+self.uname[0].lower()+"circle"
 
+            try:
+                sm.remove_widget(sm.get_screen('postlogin'))
+
+            except kivy.uix.screenmanager.ScreenManagerException:
+                pass
+
+
             # Adding dashboard screen(Postlogin page)
             sm.add_widget(PostLogin(name='postlogin'))
             Snackbar(
@@ -2119,6 +2279,9 @@ class MainApp(MDApp):
                 snackbar_y="10dp",
                 size_hint_x=.95
             ).open()
+
+
+
             # setting current screen to dashboard page.
             sm.current = 'postlogin'
 
@@ -2160,15 +2323,15 @@ class MainApp(MDApp):
     # Method that is executed when new trip button is clicked.
     def newtrip(self):
         try:
-            sm.remove_widget(sm.get_screen('newtrip'))
+            sm.remove_widget(sm.get_screen('destinations'))
         except kivy.uix.screenmanager.ScreenManagerException:
             pass
 
         # Add screen.
         # Set current screen to added screen.
         # Remove previous screen.
-        sm.add_widget(NewTrip(name='newtrip'))
-        sm.current = 'newtrip'
+        sm.add_widget(Destinations(name='destinations'))
+        sm.current = 'destinations'
         sm.remove_widget(sm.get_screen('postlogin'))
 
 
@@ -2189,6 +2352,49 @@ class MainApp(MDApp):
 
         sm.current = 'signup'
         sm.remove_widget(sm.get_screen('loginpage'))
+
+    def chatwhatsapp(self,phone):
+        self.whatsappno=phone
+        self.dialog = MDDialog(
+            text="This event takes you to Whatsapp. Do you wish to continue?",
+            buttons=[
+                DismissButton(),
+                OpenWhatsapp(),
+            ],
+        )
+        self.dialog.open()
+
+    def gotowhatsapp(self):
+        webbrowser.open("wa.me/+91" + self.whatsappno)
+
+
+    def viewmemberdetails(self,name):
+
+        names = usheet.col_values(2)
+
+        for i in range(0, len(names)):
+
+            # Retrieves all the details of name found.
+
+            if names[i] == name:
+                column = i
+                user_keys = usheet.row_values(1)
+                user_values = usheet.row_values(i + 1)
+                userdetails = {user_keys[i]: user_values[i] for i in range(len(user_keys))}
+                print(userdetails)
+                print("user found")
+
+                self.dialog = MDDialog(
+                    title= "Team Member Details",
+                    text=f"\nName:\t{userdetails['Name']} \nAge:\t{userdetails['Age']}\nGender:\t{userdetails['Gender']}\nPhone:\t{userdetails['Phone']}\nEmail:\t{userdetails['Email']}",
+                    buttons=[
+                        DismissButtonB(),
+                    ],
+                )
+                self.dialog.open()
+                break
+
+
 
 
     # Method that is executed when user clicks on submit button in signup screen.
@@ -2310,7 +2516,7 @@ class MainApp(MDApp):
                 row_data=[
                     (
                         "1",
-                        ("goa.png",
+                        ("alpha-"+self.team[0][0][0].lower()+"-circle",
                         [39 / 256, 174 / 256, 96 / 256, 1],
                          self.team[0][0]
                          ),
@@ -2318,17 +2524,26 @@ class MainApp(MDApp):
                     ),
                     (
                         "2",
+                        ("alpha-" + self.team[1][0][0].lower() + "-circle",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
                         self.team[1][0],
+                         ),
                         self.spends[self.team[1][0]],
                     ),
                     (
                         "3",
+                        ("alpha-" + self.team[2][0][0].lower() + "-circle",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
                         self.team[2][0],
+                         ),
                         self.spends[self.team[2][0]],
                     ),
                     (
                         "4",
+                        ("alpha-" + self.team[3][0][0].lower() + "-circle",
+                         [39 / 256, 174 / 256, 96 / 256, 1],
                         self.team[3][0],
+                         ),
                         self.spends[self.team[3][0]],
                     ),
 
@@ -2426,6 +2641,20 @@ class MainApp(MDApp):
             tile2 = Image(source=r"C:\\Users\\chand\\Documents\\GitHub\\FelizTour\\catwise.png", size_hint_y=0.35)
             sm.get_screen('overview').ids.catwisetab.add_widget(tile2)
 
+            # Loading variables for usage in GUI.
+            for i in range(len(self.transactionsar)):
+                self.money = self.transactionsar[i][1]
+                self.paidby = self.transactionsar[i][0]
+                self.purpose = self.transactionsar[i][2]
+                self.category = self.transactionsar[i][3]
+
+                self.paymenttime = self.transactionsar[i][4]
+
+                # Adding each transaction as a card to transactions screen.
+                # Class Tcard defines card that contains all details of a transaction
+                l = TCard()
+                sm.get_screen('overview').ids.transbox.add_widget(l)
+
 
 
         else:
@@ -2498,9 +2727,11 @@ class MainApp(MDApp):
             if (len(self.team)==4):
                 # Team has 4 people. Ready
                 self.ready='Hurray! Your team is ready'
+                self.readyicon=r"C:\Users\chand\Documents\GitHub\FelizTour\Eo_circle_light-green_checkmark.ico"
             else:
                 # Team has less than four people. Not Ready.
                 self.ready='Oops! You need to wait for others to join'
+                self.readyicon = r"C:\Users\chand\Documents\GitHub\FelizTour\Cross_red.ico"
 
             # Random declaration.
             while(len(self.team)!=4):
