@@ -1,4 +1,6 @@
 
+
+
 <HelloScreen>:
     # Hello Screen is the screen which is displayed on app startup.
 
@@ -7,24 +9,28 @@
         # Background image covers whole window of GUI.
 
         source:'logo.png'
-        size_hint_x: 1
+        size_hint_y: 1
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
-    OneLineListItem:
-        text: "Single-line item"
-        on_release: app.continue_to_app()
-        size_hint_x: 0.3
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
-    MDRaisedButton:
+
+    MDFillRoundFlatIconButton:
         # Button floating above background image.
+        icon: "arrow-right-circle"
 
         text: "Continue to APP"
         font_size: 20
-        pos_hint: {"center_x": 0.5, "center_y": 0.15}
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
         # On clicking on this button, continue_to_app() function from main will be executed.
         on_press: app.continue_to_app()
+
+    MDSpinner:
+        size_hint: None, None
+        size: dp(46), dp(46)
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        #active: True if app.loading else False
+
 
 
 

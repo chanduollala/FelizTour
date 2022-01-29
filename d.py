@@ -16,6 +16,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.imagelist import SmartTile
 from kivymd.uix.selectioncontrol import MDCheckbox
+from kivymd.uix.spinner import MDSpinner
 from kivymd.uix.swiper import MDSwiperItem
 from kivymd.uix.tab import MDTabsBase
 from kivymd.uix.taptargetview import MDTapTargetView
@@ -1767,6 +1768,10 @@ class RightCheckBox(IRightBodyTouch, MDCheckbox):
 class YourContainer(IRightBodyTouch, MDBoxLayout):
     adaptive_width = True
 
+class Spinner(MDSpinner):
+    pass
+
+
 # Global variables.
 userdetails=[]
 currentscreen='helloscreen'
@@ -1815,7 +1820,12 @@ class MainApp(MDApp):
                     widget_position="left_bottom",)
 
         # Current screen set to HelloScreen.(on app start).
+
         sm.current = 'helloscreen'
+
+        self.loading=False
+
+
 
         return sm
 
@@ -2157,6 +2167,8 @@ class MainApp(MDApp):
 
     # Method that runs when user clicks on Continue to app button in HelloScreen.
     def continue_to_app(self):
+
+        self.loading=True
 
         # Creating new screen for Userlogin and setting current screen to login screen.
         sm.add_widget(LoginPage(name='loginpage'))
@@ -2735,7 +2747,7 @@ class MainApp(MDApp):
 
             # Random declaration.
             while(len(self.team)!=4):
-                self.team.append(['', ''])
+                self.team.append(['Someone', '9999999999'])
 
             # Adding newScreen and setting it to current.
             sm.add_widget(TeamStatus(name='teamstatus'))
